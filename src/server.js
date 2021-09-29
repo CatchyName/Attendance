@@ -1,6 +1,6 @@
 const { networkInterfaces } = require("os");
 const app = require("./api/app");
-const port = 80;
+const port = process.env.PORT || 80;
 
 const nets = networkInterfaces();
 const results = {};
