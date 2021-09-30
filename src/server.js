@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { networkInterfaces } = require("os");
 const app = require("./api/app");
 const port = process.env.PORT || 80;
