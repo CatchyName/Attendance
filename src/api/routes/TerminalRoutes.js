@@ -18,10 +18,9 @@ router.get("/centers", (req, res) => {
 router.post("/scan", (req, res) => {
 
     if (TerminalController.CheckSession(req.body.sessionID)) {
-        let center = Centers.CenterName(req.body.departmentID);
+        let center = Centers.CenterName(req.body.centerID);
         if (center) {
             const employeeID = parseInt(req.body.employeeID);
-
 
             if (!employeeID || employeeID < 10000 || employeeID > 999999 || employeeID < 0) {
                 res.send(false);

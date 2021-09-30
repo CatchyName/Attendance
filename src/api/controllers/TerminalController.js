@@ -18,7 +18,7 @@ const Terminals = () => {
     return Centers.GetCenters();
 }
 
-const Scan = (employeeID, department) => {
+const Scan = (employeeID, center) => {
 
     let employee = Employees.GetEmployee(employeeID);
 
@@ -26,7 +26,7 @@ const Scan = (employeeID, department) => {
 
     if (employee.sessions.length < 1 || employee.sessions[0].finish) {
         employee.sessions.unshift({
-            department: department,
+            center: center,
             start: Date.now(),
             finish: false,
         });
