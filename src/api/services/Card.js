@@ -63,7 +63,23 @@ const ZipIDCards = () => {
     return "/cards/" + name;
 }
 
+const ChangePhoto = async (employeeID, filename) => {
+    const employee = Employees.GetEmployee(employeeID);
+    if (!employee) return false;
+
+    fs.copyFileSync(path.resolve(__dirname, "../data/Photos/" + filename), path.resolve(__dirname, "../public/photos/" + employeeID + ".png"));
+
+    employee.uuid = "";
+    Employees.ChangeEmployee(employeeID, employee);
+    await CreateID(employeeID);
+
+    return true;
+
+}
+
+
 module.exports = {
     CreateID,
-    ZipIDCards
+    ZipIDCards,
+    ChangePhoto
 }

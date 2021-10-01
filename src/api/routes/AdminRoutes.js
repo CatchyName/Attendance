@@ -38,8 +38,11 @@ router.post("/uploadfile", upload.single("sheet"), (req, res) => {
     res.redirect("/admin/index.html");
 });
 
-router.post("/uploadphoto", upload.single("photo"), (req, res) => {
-    res.redirect("/admin/index.html");
+router.post("/setphoto/:id", photoupload.single("photo"), async (req, res) => {
+    const id = req.params.id;
+    const filename = req.file.filename;
+    Card.ChangePhoto(await parseInt(id), filename);
+    res.redirect("/admin/employees.html");
 });
 
 router.use(express.json());

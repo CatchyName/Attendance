@@ -2,6 +2,7 @@ const containter = document.getElementById("employees");
 const title = document.getElementById("title");
 const center = document.getElementById("center");
 const department = document.getElementById("department");
+const form = document.getElementById("form");
 const err = document.getElementById("err");
 const table = document.getElementById("table");
 const img = document.getElementById("photo");
@@ -101,6 +102,8 @@ const LoadEmployee = async () => {
     const data = await GetEmployeeData(EmployeeID);
     if (!data) return false;
     EmployeeData = data;
+
+    form.action = "/admin/setphoto/" + data.id;
 
     title.innerHTML = `${data.name} ${data.id}`;
     center.innerHTML = `Development Center : ${await GetSubcenterName(data.center, data.subcenter)} (${await GetCenterName(data.center)})`;
