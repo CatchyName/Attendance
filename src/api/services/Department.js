@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const DedpartmentName = (departmentID) => {
+const DepartmentName = (departmentID) => {
     return GetDepartments()[departmentID - 1];
 }
 
@@ -16,5 +16,6 @@ const SetDepartments = (data) => {
 
 module.exports = {
     GetDepartments,
-    SetDepartments
+    SetDepartments,
+    DepartmentName
 }

@@ -1,4 +1,4 @@
-const { Report, Admin, Barcode, Employees, Card } = require("../services");
+const { Report, Admin, Barcode, Employees, Card, Centers } = require("../services");
 
 let inside = Admin.GetInside();
 
@@ -79,6 +79,26 @@ const AddEmployee = (name, center, subcenter, department) => {
     return Employees.AddEmployee(name, center, subcenter, department);
 }
 
+const AddCenter = (centername) => {
+    return Centers.AddCenter(centername);
+}
+
+const AddSubcenter = (centerID, subcentername) => {
+    return Centers.AddSubCenter(centerID, subcentername);
+}
+
+const DeleteCenters = (centerID) => {
+    return Centers.DeleteCenters(centerID);
+}
+
+const GetEmployee = (employeeID) => {
+    return Employees.GetEmployee(employeeID);
+}
+
+const GetEmployees = () => {
+    return Employees.Employees();
+}
+
 module.exports = {
     AddInside,
     RemoveInside,
@@ -94,5 +114,10 @@ module.exports = {
     GenerateCard,
     GenerateCards,
     AddEmployees,
-    AddEmployee
+    AddEmployee,
+    AddCenter,
+    AddSubcenter,
+    DeleteCenters,
+    GetEmployee,
+    GetEmployees
 }

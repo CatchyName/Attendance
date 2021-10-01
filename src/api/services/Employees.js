@@ -57,7 +57,7 @@ const AddEmployee = (name, centerName, subcenterName, departmentName) => {
     let employees = Employees();
     employees.push(employee.id);
     SetEmployees(employees);
-
+    fs.copyFileSync(path.resolve(__dirname, "../data/Default.png"), path.resolve(__dirname, "../data/Photos/" + employeeID + ".png"));
     fs.writeFileSync(path.resolve(__dirname, "../data/Employees/" + employeeID + ".json"), JSON.stringify(employee, null, "\t"));
 
     return employeeID;

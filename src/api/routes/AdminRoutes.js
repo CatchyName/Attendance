@@ -4,7 +4,8 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const { v4: uuidv4 } = require("uuid");
-const { AdminController } = require("../controllers");
+const { AdminController, TerminalController } = require("../controllers");
+const { Centers } = require("../services");
 const { resolveSoa } = require("dns");
 const router = express.Router();
 
@@ -35,7 +36,7 @@ const upload = multer({ storage: fileStorageEngine });
 const photoupload = multer({ storage: filePhotoEngine });
 
 router.post("/uploadfile", upload.single("sheet"), (req, res) => {
-    res.redirect("/admin/add.html" + "?filename=" + req.file.filename);
+    res.redirect("/admin/index.html");
 });
 
 router.post("/uploadphoto", upload.single("photo"), (req, res) => {
@@ -96,7 +97,7 @@ router.post("/reports", async (req, res) => {
     res.send([await AdminController.CenterReport(req.body.centerID)]);
 });
 
-// Add Employee(s)
+// Add/remove Employee(s)
 router.post("/addemployee", (req, res) => {
     if (!AdminController.CheckSession(req.body.sessionID)) {
         res.send([-1]);
@@ -117,6 +118,28 @@ router.post("/addemployees", (req, res) => {
     res.send([0]);
 });
 
+router.post("/getemployeedata", (req, res) => {
+    if (!AdminController.CheckSession(req.body.sessionID)) {
+        res.send([-1]);
+        return;
+    }
+
+    res.send([AdminController.GetEmployee(req.body.employeeID)]);
+});
+
+router.post("/getemployees", (req, res) => {
+    if (!AdminController.CheckSession(req.body.sessionID)) {
+        res.send([-1]);
+        return;
+    }
+
+    res.send([AdminController.GetEmployees()]);
+});
+
+router.post("/deletemployee", (req, res) => {
+
+});
+
 router.post("/uploadedFiles", (req, res) => {
     if (!AdminController.CheckSession(req.body.sessionID)) {
         res.send([-1]);
@@ -124,6 +147,32 @@ router.post("/uploadedFiles", (req, res) => {
     }
     const files = fs.readdirSync(path.resolve(__dirname, "../data/Uploads"));
     res.send(files);
+});
+
+// Get centers/subcenters/departments
+
+router.post("/getcenter", (req, res) => {
+    if (!AdminController.CheckSession(req.body.sessionID)) {
+        res.send([-1]);
+        return;
+    }
+    res.send([Centers.CenterName(req.body.centerID)]);
+});
+
+router.post("/getsubcenter", (req, res) => {
+    if (!AdminController.CheckSession(req.body.sessionID)) {
+        res.send([-1]);
+        return;
+    }
+    res.send([Centers.SubcenterName(req.body.centerID, req.body.subcenterID)]);
+});
+
+router.post("/getdepartment", (req, res) => {
+    if (!AdminController.CheckSession(req.body.sessionID)) {
+        res.send([-1]);
+        return;
+    }
+    res.send([Centers.DepartmentName(req.body.departmentID)]);
 });
 
 // Change password

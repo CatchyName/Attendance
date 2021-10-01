@@ -45,7 +45,7 @@ form.onsubmit = async (e) => {
 
     submit.disabled = true;
 
-    if (response[0] === 0) window.location.href = "/admin/cards.html";
+    if (response[0] === 0) window.location.href = "/admin/";
 
     submit.disabled = false;
 }

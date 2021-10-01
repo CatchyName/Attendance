@@ -69,7 +69,14 @@ const AddCenter = (name) => {
     fs.writeFileSync(path.resolve(__dirname, "../data/Centers.json"), JSON.stringify(centers, null, "\t"));
     fs.writeFileSync(path.resolve(__dirname, "../data/CenterNames.json"), JSON.stringify(centernames, null, "\t"));
     fs.writeFileSync(path.resolve(__dirname, "../data/Centers/" + centerID + ".json"), JSON.stringify([], null, "\t"));
+
     return centerID;
+}
+
+const DeleteCenters = () => {
+    fs.writeFileSync(path.resolve(__dirname, "../data/Centers.json"), JSON.stringify([], null, "\t"));
+    fs.writeFileSync(path.resolve(__dirname, "../data/CenterNames.json"), JSON.stringify({}, null, "\t"));
+    return true;
 }
 
 const FindCenter = (name) => {
@@ -147,5 +154,6 @@ module.exports = {
     AddDepartment,
     FindDepartment,
     SubcenterName,
-    DepartmentName
+    DepartmentName,
+    DeleteCenters
 }
