@@ -5,8 +5,7 @@ const path = require("path");
 const fs = require("fs");
 const { v4: uuidv4 } = require("uuid");
 const { AdminController, TerminalController } = require("../controllers");
-const { Centers } = require("../services");
-const { resolveSoa } = require("dns");
+const { Centers, Employees, Card } = require("../services");
 const router = express.Router();
 
 // Send Report every month
@@ -67,7 +66,7 @@ router.post("/card", async (req, res) => {
         res.send([-1]);
         return;
     }
-    const response = AdminController.GenerateCard(req.body.employeeID);
+    const response = await AdminController.GenerateCard(req.body.employeeID);
     res.send([response]);
 });
 
@@ -78,6 +77,14 @@ router.post("/cards", async (req, res) => {
     }
     let cards = await AdminController.GenerateCards();
     res.send(cards);
+});
+
+router.post("/getcards", (req, res) => {
+    if (!AdminController.CheckSession(req.body.sessionID)) {
+        res.send([-1]);
+        return;
+    }
+    res.send([Card.ZipIDCards()]);
 });
 
 // Generate Reports

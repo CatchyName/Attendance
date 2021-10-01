@@ -1,4 +1,5 @@
 const fs = require("fs");
+const { v4: uuidv4 } = require("uuid");
 const path = require("path");
 const Excel = require("exceljs")
 const Centers = require("./Centers");
@@ -57,7 +58,7 @@ const AddEmployee = (name, centerName, subcenterName, departmentName) => {
     let employees = Employees();
     employees.push(employee.id);
     SetEmployees(employees);
-    fs.copyFileSync(path.resolve(__dirname, "../data/Default.png"), path.resolve(__dirname, "../data/Photos/" + employeeID + ".png"));
+    fs.copyFileSync(path.resolve(__dirname, "../data/Default.png"), path.resolve(__dirname, "../public/photos/" + employeeID + ".png"));
     fs.writeFileSync(path.resolve(__dirname, "../data/Employees/" + employeeID + ".json"), JSON.stringify(employee, null, "\t"));
 
     return employeeID;
@@ -89,6 +90,7 @@ const AddEmployees = async (filename) => {
 }
 
 const GetEmployee = (employeeID) => {
+
     if (!Employees().includes(parseInt(employeeID))) return false;
 
     return JSON.parse(fs.readFileSync(path.resolve(__dirname, "../data/Employees/" + employeeID + ".json")));

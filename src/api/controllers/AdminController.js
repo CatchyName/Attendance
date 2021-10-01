@@ -57,7 +57,7 @@ const GenerateBarcodes = () => {
 }
 
 const GenerateCard = async (employeeID) => {
-    return await sCard.CreateID(employeeID);
+    return await Card.CreateID(employeeID);
 }
 
 const GenerateCards = async () => {

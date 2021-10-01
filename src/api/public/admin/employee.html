@@ -11,20 +11,21 @@
 <body>
     <h1 id="title">Loading...</h1>
     <div id="employee">
-        <img id="photo">
+        <img id="photo" style="width: 200px; height: 267px; object-fit: cover; object-position: 50% 0;">
         <p id="center"></p>
         <p id="department"></p>
         <form id="form">
             <input type="file">
             <input type="submit" value="Change Photo">
         </form>
+        <button id="report" onclick="GetReport()">Export to Excel</button>
+        <button id="card" onclick="GetCard()">Download ID Card</button>
+        <button id="delete" onclick="DeleteEmployee()">Delete Employee</button>
 
         <table id="table">
 
         </table>
-        <button id="report" onclick="GetReport()">Export to Excel</button>
-        <button id="card" onclick="GetCard()">Download ID Card</button>
-        <button id="delete" onclick="DeleteEmployee()">Delete Employee</button>
+
     </div>
     <p id="err"></p>
     <script defer src="getemployee.js"></script>

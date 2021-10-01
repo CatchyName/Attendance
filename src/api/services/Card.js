@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const AdmZip = require("adm-zip");
 const { v4: uuidv4 } = require("uuid");
 const { createCanvas, loadImage } = require("canvas");
 const Barcode = require("./GenerateBarcode");
@@ -16,7 +17,7 @@ const CreateID = async (employeeID) => {
 
     const canvas = createCanvas(637.5, 1011);
     const ctx = canvas.getContext('2d');
-    const photo = await loadImage(path.resolve(__dirname, "../data/Photos/" + employeeID + ".png"));
+    const photo = await loadImage(path.resolve(__dirname, "../public/photos/" + employeeID + ".png"));
     Barcode.GenerateBarcode(employeeID);
     const barcode = await loadImage(path.resolve(__dirname, "../public/barcodes/" + employeeID + ".png"));
 
@@ -40,7 +41,29 @@ const CreateID = async (employeeID) => {
 
 }
 
+const ZipIDCards = () => {
+    const zip = new AdmZip();
+    const employees = Employees.Employees();
+    for (let i = 0; i < employees.length; i++) {
+        let employee = Employees.GetEmployee(employees[i]);
+        if (!employee.uuid) {
+            CreateID(employees[i]);
+            i--;
+            continue;
+        }
+
+        zip.addLocalFile(path.resolve(__dirname, "../public/cards/" + employee.uuid + ".png"));
+
+    }
+
+    const name = uuidv4() + ".zip";
+
+    zip.writeZip(path.resolve(__dirname, "../public/cards/" + name));
+
+    return "/cards/" + name;
+}
 
 module.exports = {
-    CreateID
+    CreateID,
+    ZipIDCards
 }

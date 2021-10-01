@@ -4,6 +4,7 @@ const center = document.getElementById("center");
 const department = document.getElementById("department");
 const err = document.getElementById("err");
 const table = document.getElementById("table");
+const img = document.getElementById("photo");
 
 const sessionID = localStorage.getItem("sessionID");
 
@@ -104,6 +105,7 @@ const LoadEmployee = async () => {
     title.innerHTML = `${data.name} ${data.id}`;
     center.innerHTML = `Development Center : ${await GetSubcenterName(data.center, data.subcenter)} (${await GetCenterName(data.center)})`;
     department.innerHTML = `Department : ${await GetDepartmentName(data.department)}`;
+    img.src = "/photos/" + EmployeeData.id + ".png";
 
     const tr = document.createElement("tr");
 
@@ -166,7 +168,7 @@ const GetReport = async () => {
 }
 
 const GetCard = async () => {
-    let response = await fetch("/admin/report", {
+    let response = await fetch("/admin/card", {
         mode: 'cors',
         method: 'POST',
         headers: {
@@ -182,8 +184,7 @@ const GetCard = async () => {
     if (response[0] === -1) window.location.href = "/admin/login.html";
 
     if (response[0]) {
-        console.log(response[0]);
-        // window.open(response, "_blank").focus();
+        window.open(response[0], "_blank").focus();
     } else {
         err.innerHTML = "Something went wrong!";
     }
