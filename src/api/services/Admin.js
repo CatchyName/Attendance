@@ -4,11 +4,11 @@ const Info = require("./Info");
 let sessions = {};
 
 const GetInside = () => {
-    return Info.GetInside();
+    return 0;
 }
 
 const SetInside = (n) => {
-    return Info.SetInside(n);
+    return 0;
 }
 
 const Login = (password) => {

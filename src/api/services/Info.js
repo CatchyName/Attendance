@@ -2,14 +2,19 @@ const sha256 = require("sha256");
 const path = require("path");
 const fs = require("fs");
 
-const GetAdminPassword = () => {
+
+const CheckAdminPassword = (pass) => {
     const info = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../data/info.json")));
-    return info.admin;
+
+    if (info.admin === sha256(pass)) return true;
+    else return false;
 }
 
-const GetTerminalPassword = () => {
+const CheckTerminalPassword = (pass) => {
     const info = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../data/info.json")));
-    return info.admin;
+
+    if (info.terminal === sha256(pass)) return true;
+    else return false;
 }
 
 const SetAdminPassword = (oldpass, newpass) => {
@@ -28,23 +33,9 @@ const SetTerminalPassword = (oldpass, newpass) => {
     return true;
 }
 
-const GetInside = () => {
-    const info = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../data/info.json")));
-    return info.inside;
-}
-
-const SetInside = (inside) => {
-    let info = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../data/info.json")));
-    info.inside = inside;
-    fs.writeFileSync(path.resolve(__dirname, "../data/info.json"), JSON.stringify(info, null, "\t"));
-    return info.inside;
-}
-
 module.exports = {
-    GetAdminPassword,
-    GetTerminalPassword,
+    CheckAdminPassword,
+    CheckTerminalPassword,
     SetAdminPassword,
     SetTerminalPassword,
-    GetInside,
-    SetInside,
 }
