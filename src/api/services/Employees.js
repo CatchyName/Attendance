@@ -89,6 +89,13 @@ const AddEmployees = async (filename) => {
     return ids;
 }
 
+const AddSession = (employeeID, session) => {
+    let employee = GetEmployee(employeeID);
+    employee.sessions.unshift(session);
+    ChangeEmployee(employeeID, employee);
+    return true;
+}
+
 const GetEmployee = (employeeID) => {
 
     if (!Employees().includes(parseInt(employeeID))) return false;
@@ -109,5 +116,6 @@ module.exports = {
     ChangeEmployee,
     EmployeesNumber,
     Employees,
-    SetEmployees
+    SetEmployees,
+    AddSession
 }

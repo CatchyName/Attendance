@@ -34,9 +34,16 @@ const filePhotoEngine = multer.diskStorage({
 const upload = multer({ storage: fileStorageEngine });
 const photoupload = multer({ storage: filePhotoEngine });
 
+
+
+// Authentication
+
+router.post("/login", express.json(), Admin.Login);
 router.use(cookieParser());
+router.use(Admin.ValidateCookie);
 
 router.post("/uploadfile", upload.single("sheet"), (req, res) => {
+    AdminController.AddEmployees(req.file.filename);
     res.redirect("/admin/index.html");
 });
 
@@ -49,15 +56,10 @@ router.post("/setphoto/:id", photoupload.single("photo"), async (req, res) => {
 
 router.use(express.json());
 
-// Authentication
-router.post("/login", Admin.Login);
-router.use(Admin.ValidateCookie);
-
 // Number of employees currently working
 router.post("/present", (req, res) => {
     res.send([AdminController.GetInside()]);
 });
-
 
 // Generate ID Cards
 router.post("/card", async (req, res) => {
@@ -83,32 +85,22 @@ router.post("/reports", async (req, res) => {
     res.send([await AdminController.CenterReport(req.body.centerID)]);
 });
 
-// Add/remove Employee(s)
+// Add/remove/get Employee(s)
+
+router.get("/getemployees", (req, res) => {
+    res.send({ data: AdminController.GetEmployees() });
+});
+
 router.post("/addemployee", (req, res) => {
     res.send([AdminController.AddEmployee(req.body.name, req.body.center, req.body.subcenter, req.body.department)]);
 });
 
-router.post("/addemployees", (req, res) => {
-    AdminController.AddEmployees(req.body.filename);
-
-    res.send([0]);
-});
-
-router.post("/getemployeedata", (req, res) => {
+router.get("/getemployeedata", (req, res) => {
     res.send([AdminController.GetEmployee(req.body.employeeID)]);
-});
-
-router.post("/getemployees", (req, res) => {
-    res.send([AdminController.GetEmployees()]);
 });
 
 router.post("/deletemployee", (req, res) => {
 
-});
-
-router.post("/uploadedFiles", (req, res) => {
-    const files = fs.readdirSync(path.resolve(__dirname, "../data/Uploads"));
-    res.send(files);
 });
 
 // Get centers/subcenters/departments
@@ -117,11 +109,11 @@ router.post("/addcenter", (req, res) => {
 
 });
 
-router.post("/getcenters", (req, res) => {
-
+router.get("/getcenters", (req, res) => {
+    res.send(Centers.GetCenters());
 });
 
-router.post("/getcenter", (req, res) => {
+router.get("/getcenter", (req, res) => {
     res.send([Centers.CenterName(req.body.centerID)]);
 });
 
