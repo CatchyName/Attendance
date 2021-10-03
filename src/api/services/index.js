@@ -4,6 +4,7 @@ const Centers = require("./Centers");
 const Admin = require("./Admin");
 const Card = require("./Card");
 const Info = require("./Info");
+const Sessions = require("./Sessions");
 
 module.exports = {
     Employees,
@@ -11,5 +12,6 @@ module.exports = {
     Centers,
     Admin,
     Card,
-    Info
+    Info,
+    Sessions
 }

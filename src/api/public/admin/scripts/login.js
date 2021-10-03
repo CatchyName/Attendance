@@ -16,12 +16,10 @@ form.onsubmit = async (e) => {
         }),
     }).then(res => res.json());
 
-    if (response[0]) {
-        localStorage.setItem("sessionID", response[0]);
-        window.location = "/admin/index.html";
-
-    } else {
+    if (response.code === 0) window.location = "/admin/";
+    if (response.code === -1) {
+        err.innerHTML = response.msg;
         pass.value = "";
-        err.innerHTML = "Wrong password";
     }
+
 }

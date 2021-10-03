@@ -6,7 +6,7 @@ const fs = require("fs");
 const { v4: uuidv4 } = require("uuid");
 const { AdminController, TerminalController } = require("../controllers");
 const { Admin } = require("../middleware");
-const { Centers, Employees, Card } = require("../services");
+const { Centers, Employees, Card, Sessions } = require("../services");
 const router = express.Router();
 
 // Send Report every month
@@ -57,8 +57,11 @@ router.post("/setphoto/:id", photoupload.single("photo"), async (req, res) => {
 router.use(express.json());
 
 // Number of employees currently working
-router.post("/present", (req, res) => {
-    res.send([AdminController.GetInside()]);
+router.get("/present", (req, res) => {
+    res.send({
+        code: 0,
+        data: Sessions.ActiveSessions()
+    });
 });
 
 // Generate ID Cards
