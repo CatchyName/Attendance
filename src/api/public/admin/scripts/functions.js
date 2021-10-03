@@ -43,7 +43,21 @@ const GetCenter = async (centerID) => {
 }
 
 const GetSubcenters = async (centerID) => {
+    let response = await fetch("/admin/getsubcenters", {
+        mode: 'cors',
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            centerID: centerID
+        })
+    }).then(res => res.json());
 
+    if (response.code === -1) window.location = "/admin/login.html";
+    if (response.code === 0) return response.data;
+    else return false;
 }
 
 const GetSubcenter = async (centerID, subID) => {

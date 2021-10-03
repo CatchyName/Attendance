@@ -62,6 +62,10 @@ const AddCenter = (name) => {
     const centerID = centers.length;
     centernames[name.toUpperCase()] = centerID;
 
+    let ec = Employees.EmployeeCenters();
+    ec[centername] = [];
+    Employees.SetEmployeeCenters(ec);
+
     fs.writeFileSync(path.resolve(__dirname, "../data/Centers.json"), JSON.stringify(centers, null, "\t"));
     fs.writeFileSync(path.resolve(__dirname, "../data/CenterNames.json"), JSON.stringify(centernames, null, "\t"));
     fs.writeFileSync(path.resolve(__dirname, "../data/Centers/" + centerID + ".json"), JSON.stringify([], null, "\t"));
@@ -69,7 +73,7 @@ const AddCenter = (name) => {
     return centerID;
 }
 
-const DeleteCenters = () => {
+const Clear = () => {
     fs.writeFileSync(path.resolve(__dirname, "../data/Centers.json"), JSON.stringify([], null, "\t"));
     fs.writeFileSync(path.resolve(__dirname, "../data/CenterNames.json"), JSON.stringify({}, null, "\t"));
     return true;
@@ -151,6 +155,6 @@ module.exports = {
     FindDepartment,
     SubcenterName,
     DepartmentName,
-    DeleteCenters,
+    Clear,
     GetDepartments
 }

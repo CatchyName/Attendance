@@ -75,8 +75,8 @@ const AddEmployees = async filename => {
     return Employees.AddEmployees(filename);
 }
 
-const AddEmployee = (name, center, subcenter, department) => {
-    return Employees.AddEmployee(name, center, subcenter, department);
+const AddEmployee = (name, centerName, subcenterName, departmentName, idno, sowo, gender, zoneno, zonedep, contactno, blood) => {
+    return Employees.AddEmployee(name, centerName, subcenterName, departmentName, idno, sowo, gender, zoneno, zonedep, contactno, blood);
 }
 
 const AddCenter = (centername) => {
@@ -99,6 +99,11 @@ const GetEmployees = () => {
     return Employees.Employees();
 }
 
+const FactoryReset = () => {
+    Centers.Clear();
+    Employees.Clear();
+}
+
 module.exports = {
     AddInside,
     RemoveInside,
@@ -119,5 +124,6 @@ module.exports = {
     AddSubcenter,
     DeleteCenters,
     GetEmployee,
-    GetEmployees
+    GetEmployees,
+    FactoryReset
 }

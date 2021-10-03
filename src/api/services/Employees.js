@@ -5,11 +5,11 @@ const Excel = require("exceljs")
 const Centers = require("./Centers");
 
 const EmployeeCenters = () => {
-    return JSON.parse(fs.readFileSync(path.resolve(__dirname, "../data/Employee.json")));
+    return JSON.parse(fs.readFileSync(path.resolve(__dirname, "../data/EmployeeCenters.json")));
 }
 
 const SetEmployeeCenters = (data) => {
-    fs.writeFileSync(path.resolve(__dirname, "../data/Employee.json"), JSON.stringify(data, null, "\t"));
+    fs.writeFileSync(path.resolve(__dirname, "../data/EmployeeCenters.json"), JSON.stringify(data, null, "\t"));
     return;
 }
 
@@ -39,6 +39,10 @@ const AddEmployee = (name, centerName, subcenterName, departmentName, idno, sowo
         departmentID = Centers.AddDepartment(departmentName);
     }
 
+
+
+    // ID Generation modified to refill deleted IDs
+
     let ec = EmployeeCenters();
     let employeeID = 0;
     let refill = false;
@@ -48,12 +52,13 @@ const AddEmployee = (name, centerName, subcenterName, departmentName, idno, sowo
             ec[centerName.toUpperCase()][i] = centerID * 10000 + i + 1;
             employeeID = centerID * 10000 + i + 1;
             refill = true;
+            SetEmployeeCenters(ec);
             break;
         }
     }
 
     if (!refill) {
-        employeeID = centerID * 10000 + ec[centerName.toUpperCase()].length;
+        employeeID = centerID * 10000 + ec[centerName.toUpperCase()].length + 1;
         ec[centerName.toUpperCase()].push(employeeID);
         SetEmployeeCenters(ec);
     }
@@ -165,6 +170,17 @@ const ChangeEmployee = (employeeID, employeeData) => {
     fs.writeFileSync(path.resolve(__dirname, "../data/Employees/" + employeeID + ".json"), JSON.stringify(employeeData, null, "\t"));
 }
 
+const Clear = () => {
+    const employees = Employees();
+
+    for (let i = 0; i < employees.length; i++) {
+        fs.unlinkSync(path.resolve(__dirname, "../data/Employees/" + employeeID + ".json"));
+        fs.unlinkSync(path.resolve(__dirname, "../public/photos/" + employeeID + ".png"));
+    }
+
+    SetEmployees([]);
+}
+
 module.exports = {
     AddEmployee,
     AddEmployees,
@@ -173,5 +189,8 @@ module.exports = {
     ChangeEmployee,
     Employees,
     SetEmployees,
-    AddSession
+    AddSession,
+    EmployeeCenters,
+    SetEmployeeCenters,
+    Clear
 }

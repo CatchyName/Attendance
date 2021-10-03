@@ -12,13 +12,33 @@
     <h1>Add employee</h1>
     <form id="form">
         Employee Name: <input type="text" id="name"><br>
-        Development Center: <input type="text" id="center"><br>
-        Sub Center: <input type="text" id="subcenter"><br>
-        Department: <input type="text" id="department"><br>
+        Id Number: <input type="text" id="idno"><br>
+        S/o. / W/o.: <input type="text" id="sowo"><br>
+        Zone Number: <input type="text" id="zoneno"><br>
+        Zone Department: <input type="text" id="zonedepartment"><br>
+        Contact Number: <input type="text" id="contactno"><br>
+        Gender: <select id="gender">
+            <option value="MALE">MALE</option>
+            <option value="FEMALE">FEMALE</option>
+        </select><br>
+        Blood Group: <select id="blood">
+            <option value="A+">A+</option>
+            <option value="B+">B+</option>
+            <option value="AB+">AB+</option>
+            <option value="O+">O+</option>
+            <option value="A-">A-</option>
+            <option value="B-">B-</option>
+            <option value="AB-">AB-</option>
+            <option value="O-">O-</option>
+        </select><br>
+        Development Center: <select id="center"></select><br>
+        Sub Center: <select id="subcenter"></select><br>
+        Department: <select id="department"></select><br>
         <input type="submit" id="submit"><br>
     </form>
     <p id="err"></p>
-    <script defer src="employee.js"></script>
+    <script defer src="scripts/functions.js"></script>
+    <script defer src="scripts/employee.js"></script>
 </body>
 
 </html>

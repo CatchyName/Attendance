@@ -64,10 +64,7 @@ router.get("/check", (req, res) => {
 
 // Number of employees currently working
 router.get("/present", (req, res) => {
-    res.send({
-        code: 0,
-        data: Sessions.ActiveSessions()
-    });
+    res.send({ code: 0, data: Sessions.ActiveSessions() });
 });
 
 // Generate ID Cards
@@ -101,7 +98,8 @@ router.get("/getemployees", (req, res) => {
 });
 
 router.post("/addemployee", (req, res) => {
-    res.send([AdminController.AddEmployee(req.body.name, req.body.center, req.body.subcenter, req.body.department)]);
+    const response = AdminController.AddEmployee(req.body.name, req.body.center, req.body.subcenter, req.body.department, req.body.idno, req.body.sowo, req.body.gender, req.body.zoneno, req.body.zonedepartment, req.body.contactno, req.body.blood);
+    res.send({ code: 0, msg: "Employee added successfully.", data: { employeeID: response } });
 });
 
 router.get("/getemployeedata", (req, res) => {
@@ -195,7 +193,7 @@ router.get("/getcenters", (req, res) => {
     res.send({ code: 0, msg: "Successful request.", data: Centers.GetCenters() });
 });
 
-router.get("/getsubcenters", (req, res) => {
+router.post("/getsubcenters", (req, res) => {
     res.send({ code: 0, msg: "Successful request.", data: Centers.GetSubCenters(req.body.centerID) });
 });
 
@@ -203,7 +201,7 @@ router.get("/getdepartments", (req, res) => {
     res.send({ code: 0, msg: "Successful request.", data: Centers.GetDepartments() });
 });
 
-router.get("/getcenter", (req, res) => {
+router.post("/getcenter", (req, res) => {
     res.send({ code: 0, msg: "Successful request.", data: Centers.CenterName(req.body.centerID) });
 });
 
@@ -235,8 +233,9 @@ router.post("/changeterminalpass", (req, res) => {
     }
 });
 
-router.post('/cleareverythingiamsurejustdoit', (req, res) => {
-    // Clear everything, make it ready for production
+router.get('/cleareverythingiamsurejustdoit', (req, res) => {
+    AdminController.FactoryReset();
+    res.send("Done");
 });
 
 module.exports = router;
