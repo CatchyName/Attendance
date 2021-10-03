@@ -4,11 +4,11 @@ const path = require("path");
 const Excel = require("exceljs")
 const Centers = require("./Centers");
 
-const EmployeesNumber = () => {
+const EmployeeCenters = () => {
     return JSON.parse(fs.readFileSync(path.resolve(__dirname, "../data/Employee.json")));
 }
 
-const SetEmployeesNumber = (data) => {
+const SetEmployeeCenters = (data) => {
     fs.writeFileSync(path.resolve(__dirname, "../data/Employee.json"), JSON.stringify(data, null, "\t"));
     return;
 }
@@ -22,7 +22,7 @@ const SetEmployees = (employees) => {
     return;
 }
 
-const AddEmployee = (name, centerName, subcenterName, departmentName) => {
+const AddEmployee = (name, centerName, subcenterName, departmentName, idno, sowo, gender, zoneno, zonedep, contactno, blood) => {
 
     let centerID = Centers.FindCenter(centerName);
     if (!centerID) {
@@ -39,14 +39,34 @@ const AddEmployee = (name, centerName, subcenterName, departmentName) => {
         departmentID = Centers.AddDepartment(departmentName);
     }
 
-    let en = EmployeesNumber();
-    en[centerID - 1]++;
-    SetEmployeesNumber(en);
+    let ec = EmployeeCenters();
+    let employeeID = 0;
+    let refill = false;
 
-    let employeeID = centerID * 10000 + en[centerID - 1];
+    for (let i = 0; i < ec[centerName.toUpperCase()].length; i++) {
+        if (ec[centerName.toUpperCase()][i] === 0) {
+            ec[centerName.toUpperCase()][i] = centerID * 10000 + i + 1;
+            employeeID = centerID * 10000 + i + 1;
+            refill = true;
+            break;
+        }
+    }
+
+    if (!refill) {
+        employeeID = centerID * 10000 + ec[centerName.toUpperCase()].length;
+        ec[centerName.toUpperCase()].push(employeeID);
+        SetEmployeeCenters(ec);
+    }
 
     let employee = {
         "id": employeeID,
+        "idno": idno,
+        "sowo": sowo,
+        "gender": gender,
+        "zoneno": zoneno,
+        "zonedeparatment": zonedep,
+        "contactno": contactno,
+        "blood": blood,
         "uuid": "",
         "center": centerID,
         "subcenter": subID,
@@ -72,21 +92,57 @@ const AddEmployees = async (filename) => {
 
     const worksheet = workbook.worksheets[0];
 
-    for (let i = 3; true; i++) {
+    for (let i = 2; true; i++) {
         const row = worksheet.getRow(i);
+
         if (!row.getCell(1).value) {
             break;
         }
 
+        if (!row.getCell(3).value) {
+            continue;
+        }
+
+        const idno = row.getCell(1).value;
         const name = row.getCell(2).value;
+        const sowo = row.getCell(3).value;
+        const gender = row.getCell(4).value;
+        const contactno = row.getCell(8).value;
+        const blood = row.getCell(16).value;
         const department = row.getCell(17).value;
+        const zoneno = row.getCell(19).value;
+        const zonedeparatment = row.getCell(20).value;
         const center = row.getCell(23).value;
         const subcenter = row.getCell(22).value;
 
-        ids.push(AddEmployee(name, center, subcenter, department));
+        ids.push(AddEmployee(name, center, subcenter, department, idno, sowo, gender, zoneno, zonedeparatment, contactno, blood));
     }
 
     return ids;
+}
+
+const DeleteEmployee = (employeeID) => {
+    let centername = Centers.CenterName(Math.Floor(employeeID / 10000));
+
+    // Remove Emoployee from the center list
+    let ec = EmployeeCenters();
+    ec[centername.toUpperCase()][employeeID % 10000 - 1] = 0;
+    SetEmployeeCenters(ec);
+
+
+    // Remove Employee from all employees list
+    let emps = GetEmployees();
+    for (let i = 0; i < emps.length; i++) {
+        if (emps[i] === employeeID) {
+            emps.splice(i, 1);
+            break;
+        }
+    }
+    SetEmployees(emps);
+
+    // Delete employee file
+    fs.unlinkSync(path.resolve(__dirname, "../data/Employees/" + employeeID + ".json"));
+    return true;
 }
 
 const AddSession = (employeeID, session) => {
@@ -112,9 +168,9 @@ const ChangeEmployee = (employeeID, employeeData) => {
 module.exports = {
     AddEmployee,
     AddEmployees,
+    DeleteEmployee,
     GetEmployee,
     ChangeEmployee,
-    EmployeesNumber,
     Employees,
     SetEmployees,
     AddSession

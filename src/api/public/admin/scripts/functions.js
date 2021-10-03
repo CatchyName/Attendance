@@ -33,6 +33,7 @@ const GetCenters = async () => {
         }
     }).then(res => res.json());
 
+    if (response.code === -1) window.location = "/admin/login.html";
     if (response.code === 0) return response.data;
     else return false;
 }
@@ -50,7 +51,18 @@ const GetSubcenter = async (centerID, subID) => {
 }
 
 const GetDepartments = async () => {
+    let response = await fetch("/admin/getdepartments", {
+        mode: 'cors',
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+    }).then(res => res.json());
 
+    if (response.code === -1) window.location = "/admin/login.html";
+    if (response.code === 0) return response.data;
+    else return false;
 }
 
 const GetDepartment = async (depID) => {

@@ -1,12 +1,11 @@
 const select = document.getElementById("select");
 const form = document.getElementById("form");
 const submit = document.getElementById("submit");
+const err = document.getElementById("err");
 
 const oldp = document.getElementById("oldpass");
 const newp = document.getElementById("newpass");
 
-
-const sessionID = localStorage.getItem("sessionID");
 
 form.onsubmit = async (e) => {
     e.preventDefault();
@@ -19,7 +18,6 @@ form.onsubmit = async (e) => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            sessionID: sessionID,
             oldpass: oldp.value,
             newpass: newp.value
         })
@@ -27,13 +25,17 @@ form.onsubmit = async (e) => {
 
     submit.disabled = true;
 
-    if (response[0] === -1) window.location.href = "/admin/login.html";
-    if (response[0] === true) window.location.href = "/admin/index.html";
-    if (response[0] === false) {
-        alert("Wrong password");
-        oldp.value = "";
+    if (response.code === -1) window.location.href = "/admin/login.html";
+    if (response.code === 1) {
+        oldpass.value = "";
+        newpass.value = "";
+        err.innerHTML = response.msg;
     }
+
+    if (response.code === 0) window.location.href = "/admin/index.html";
 
 
     submit.disabled = false;
 }
+
+CheckSession();

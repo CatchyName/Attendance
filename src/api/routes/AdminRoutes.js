@@ -218,11 +218,21 @@ router.get("/getdepartment", (req, res) => {
 // Change password
 
 router.post("/changeadminpass", (req, res) => {
-    res.send([AdminController.ChangeAdminPassword(req.body.oldpass, req.body.newpass)]);
+    const response = AdminController.ChangeAdminPassword(req.body.oldpass, req.body.newpass)
+    if (response) {
+        res.send({ code: 0, msg: "Admin password changed successfully." });
+    } else {
+        res.send({ code: 1, msg: "Wrong password." });
+    }
 });
 
 router.post("/changeterminalpass", (req, res) => {
-    res.send([AdminController.ChangeTerminalPassword(req.body.oldpass, req.body.newpass)]);
+    const response = AdminController.ChangeTerminalPassword(req.body.oldpass, req.body.newpass)
+    if (response) {
+        res.send({ code: 0, msg: "Terminal password changed successfully." });
+    } else {
+        res.send({ code: 1, msg: "Wrong password." });
+    }
 });
 
 router.post('/cleareverythingiamsurejustdoit', (req, res) => {
