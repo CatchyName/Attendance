@@ -60,11 +60,7 @@ const AddCenter = (name) => {
     let centernames = GetCenterNames();
     centers.push(name.toUpperCase());
     const centerID = centers.length;
-    centernames[name] = centerID;
-
-    let en = EmployeesNumber();
-    en.push(0);
-    SetEmployeesNumber(en);
+    centernames[name.toUpperCase()] = centerID;
 
     fs.writeFileSync(path.resolve(__dirname, "../data/Centers.json"), JSON.stringify(centers, null, "\t"));
     fs.writeFileSync(path.resolve(__dirname, "../data/CenterNames.json"), JSON.stringify(centernames, null, "\t"));

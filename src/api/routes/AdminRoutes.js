@@ -56,6 +56,12 @@ router.post("/setphoto/:id", photoupload.single("photo"), async (req, res) => {
 
 router.use(express.json());
 
+// Check session
+
+router.get("/check", (req, res) => {
+    res.send({ code: 0 });
+})
+
 // Number of employees currently working
 router.get("/present", (req, res) => {
     res.send({
@@ -91,7 +97,7 @@ router.post("/reports", async (req, res) => {
 // Add/remove/get Employee(s)
 
 router.get("/getemployees", (req, res) => {
-    res.send({ data: AdminController.GetEmployees() });
+    res.send({ code: 0, msg: "Successful request.", data: AdminController.GetEmployees() });
 });
 
 router.post("/addemployee", (req, res) => {
@@ -109,11 +115,73 @@ router.post("/deletemployee", (req, res) => {
 // Get centers/subcenters/departments
 
 router.post("/addcenter", (req, res) => {
+    const centername = req.body.center;
+    if (!centername) {
+        res.send({
+            code: 1,
+            msg: "Invalid center name."
+        });
+    } else {
+        const center = Centers.FindCenter(centername);
+        if (center) {
+            res.send({
+                code: 1,
+                msg: `Center already exists with ID ${center}.`
+            });
+        } else {
+            const centerID = Centers.AddCenter(centername);
+            res.send({
+                code: 0,
+                msg: `Created a center with ID ${centerID}`
+            });
+        }
+    }
+});
+
+router.post("/addsubcenter", (req, res) => {
+    const centerID = req.body.center;
+    const subname = req.body.subname;
+
+    if (!centerID || !subname) {
+        res.send({
+            code: 1,
+            msg: "Invalid center name."
+        });
+        return;
+    }
+
+    const center = Centers.CenterName(centerID);
+    if (!center) {
+        res.send({
+            code: 1,
+            msg: `Center does not exist.`
+        });
+        return;
+    }
+
+    if (subname === "") {
+        res.send({
+            code: 1,
+            msg: `Empty subcenter name.`
+        });
+        return;
+    }
+
+    const subID = Centers.AddSubCenter(centerID, subname);
+    res.send({
+        code: 0,
+        msg: `Created a subcenter with ID ${subID}`
+    });
 
 });
 
+
 router.get("/getcenters", (req, res) => {
-    res.send(Centers.GetCenters());
+    res.send({
+        code: 0,
+        msg: "Successful request.",
+        data: Centers.GetCenters()
+    });
 });
 
 router.get("/getcenter", (req, res) => {
@@ -136,6 +204,10 @@ router.post("/changeadminpass", (req, res) => {
 
 router.post("/changeterminalpass", (req, res) => {
     res.send([AdminController.ChangeTerminalPassword(req.body.oldpass, req.body.newpass)]);
+});
+
+router.post('/cleareverythingiamsurejustdoit', (req, res) => {
+    // Clear everything, make it ready for production
 });
 
 module.exports = router;
