@@ -35,9 +35,11 @@ form.onsubmit = async (e) => {
         return
     }
     if (response.code === 1) {
+        subcenter.value = "";
         err.innerHTML = response.msg;
     }
     else if (response.code === 0) {
+        subcenter.value = "";
         err.innerHTML = response.msg;
     }
 

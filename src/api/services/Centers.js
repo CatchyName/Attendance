@@ -118,7 +118,7 @@ const AddSubCenter = (centerID, name) => {
 
 const AddDepartment = (departmentName) => {
     const departments = GetDepartments();
-    departments.push(departmentName);
+    departments.push(departmentName.toUpperCase());
     fs.writeFileSync(path.resolve(__dirname, "../data/Departments.json"), JSON.stringify(departments, null, "\t"));
     return departments.length;
 }
@@ -151,5 +151,6 @@ module.exports = {
     FindDepartment,
     SubcenterName,
     DepartmentName,
-    DeleteCenters
+    DeleteCenters,
+    GetDepartments
 }

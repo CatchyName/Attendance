@@ -116,7 +116,7 @@ router.post("/deletemployee", (req, res) => {
 
 router.post("/addcenter", (req, res) => {
     const centername = req.body.center;
-    if (!centername) {
+    if (!centername || centername === "") {
         res.send({
             code: 1,
             msg: "Invalid center name."
@@ -143,57 +143,76 @@ router.post("/addsubcenter", (req, res) => {
     const subname = req.body.subname;
 
     if (!centerID || !subname) {
-        res.send({
-            code: 1,
-            msg: "Invalid center name."
-        });
+        res.send({ code: 1, msg: "Invalid center name." });
         return;
     }
 
     const center = Centers.CenterName(centerID);
     if (!center) {
-        res.send({
-            code: 1,
-            msg: `Center does not exist.`
-        });
+        res.send({ code: 1, msg: "Center does not exist." });
         return;
     }
 
-    if (subname === "") {
-        res.send({
-            code: 1,
-            msg: `Empty subcenter name.`
-        });
+    if (!subname || subname === "") {
+        res.send({ code: 1, msg: "Empty subcenter name." });
+        return;
+    }
+
+    const subcenter = Centers.FindSubcenter(centerID, subname);
+    if (subcenter) {
+        res.send({ code: 1, msg: `Subcenter already exists with ID ${subcenter}` });
         return;
     }
 
     const subID = Centers.AddSubCenter(centerID, subname);
+    res.send({ code: 0, msg: `Created a subcenter with ID ${subID}` });
+
+});
+
+router.post("/adddepartment", (req, res) => {
+    const departmentname = req.body.department;
+
+    if (!departmentname || departmentname === "") {
+        res.send({ code: 1, msg: "Invalid department name." });
+        return;
+    }
+
+    const department = Centers.FindDepartment(departmentname);
+    if (department) {
+        res.send({ code: 1, msg: `Department exists with ID ${department}` });
+        return;
+    }
+
+    const departmentID = Centers.AddDepartment(departmentname);
     res.send({
         code: 0,
-        msg: `Created a subcenter with ID ${subID}`
+        msg: `Created a deaprtment with ID ${departmentID}`
     });
 
 });
 
-
 router.get("/getcenters", (req, res) => {
-    res.send({
-        code: 0,
-        msg: "Successful request.",
-        data: Centers.GetCenters()
-    });
+    res.send({ code: 0, msg: "Successful request.", data: Centers.GetCenters() });
+});
+
+router.get("/getsubcenters", (req, res) => {
+    res.send({ code: 0, msg: "Successful request.", data: Centers.GetSubCenters(req.body.centerID) });
+});
+
+router.get("/getdepartments", (req, res) => {
+    res.send({ code: 0, msg: "Successful request.", data: Centers.GetDepartments() });
 });
 
 router.get("/getcenter", (req, res) => {
-    res.send([Centers.CenterName(req.body.centerID)]);
+    res.send({ code: 0, msg: "Successful request.", data: Centers.CenterName(req.body.centerID) });
 });
 
-router.post("/getsubcenter", (req, res) => {
-    res.send([Centers.SubcenterName(req.body.centerID, req.body.subcenterID)]);
+router.get("/getsubcenter", (req, res) => {
+    res.send({ code: 0, msg: "Successful request.", data: Centers.SubcenterName(req.body.centerID, req.body.subcenterID) });
 });
 
-router.post("/getdepartment", (req, res) => {
-    res.send([Centers.DepartmentName(req.body.departmentID)]);
+router.get("/getdepartment", (req, res) => {
+    res.send({ code: 0, msg: "Successful request.", data: Centers.DepartmentName(req.body.departmentID) });
 });
 
 // Change password

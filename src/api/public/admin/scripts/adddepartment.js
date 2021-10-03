@@ -1,10 +1,10 @@
 const form = document.getElementById("form");
-const center = document.getElementById("center");
+const department = document.getElementById("department");
 const err = document.getElementById("err");
 
 form.onsubmit = async (e) => {
     e.preventDefault();
-    let response = await fetch("/admin/addcenter", {
+    let response = await fetch("/admin/adddepartment", {
         mode: 'cors',
         method: 'POST',
         headers: {
@@ -12,17 +12,19 @@ form.onsubmit = async (e) => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            center: center.value,
+            department: department.value,
         })
     }).then(res => res.json());
 
     if (response.code === -1) {
         window.location = "/admin/login.html"
     } else if (response.code === 0) {
-        center.value = "";
+        department.value = "";
         err.innerHTML = response.msg;
     } else {
-        center.value = "";
+        department.value = "";
         err.innerHTML = response.msg;
     }
 }
+
+CheckSession();
