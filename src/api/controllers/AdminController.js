@@ -104,6 +104,10 @@ const FactoryReset = () => {
     Employees.Clear();
 }
 
+const DeleteEmployee = (employeeID) => {
+    Employees.DeleteEmployee(employeeID);
+}
+
 module.exports = {
     AddInside,
     RemoveInside,
@@ -125,5 +129,6 @@ module.exports = {
     DeleteCenters,
     GetEmployee,
     GetEmployees,
-    FactoryReset
+    FactoryReset,
+    DeleteEmployee
 }

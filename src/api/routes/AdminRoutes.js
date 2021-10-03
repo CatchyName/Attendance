@@ -102,12 +102,12 @@ router.post("/addemployee", (req, res) => {
     res.send({ code: 0, msg: "Employee added successfully.", data: { employeeID: response } });
 });
 
-router.get("/getemployeedata", (req, res) => {
-    res.send([AdminController.GetEmployee(req.body.employeeID)]);
+router.post("/getemployeedata", (req, res) => {
+    res.send({ code: 0, msg: "Successful request.", data: AdminController.GetEmployee(req.body.employeeID) });
 });
 
-router.post("/deletemployee", (req, res) => {
-
+router.post("/deleteemployee", (req, res) => {
+    res.send({ code: 0, msg: "Successful request.", data: AdminController.DeleteEmployee(req.body.employeeID) });
 });
 
 // Get centers/subcenters/departments
@@ -205,11 +205,11 @@ router.post("/getcenter", (req, res) => {
     res.send({ code: 0, msg: "Successful request.", data: Centers.CenterName(req.body.centerID) });
 });
 
-router.get("/getsubcenter", (req, res) => {
+router.post("/getsubcenter", (req, res) => {
     res.send({ code: 0, msg: "Successful request.", data: Centers.SubcenterName(req.body.centerID, req.body.subcenterID) });
 });
 
-router.get("/getdepartment", (req, res) => {
+router.post("/getdepartment", (req, res) => {
     res.send({ code: 0, msg: "Successful request.", data: Centers.DepartmentName(req.body.departmentID) });
 });
 

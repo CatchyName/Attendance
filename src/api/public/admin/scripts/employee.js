@@ -5,7 +5,7 @@ const name = document.getElementById("name");
 const idno = document.getElementById("idno");
 const sowo = document.getElementById("sowo");
 const zoneno = document.getElementById("zoneno");
-const zonedeparatment = document.getElementById("zonedepartment");
+const zonedepartment = document.getElementById("zonedepartment");
 const contactno = document.getElementById("contactno");
 const gender = document.getElementById("gender");
 const blood = document.getElementById("blood");
@@ -64,7 +64,7 @@ form.onsubmit = async (e) => {
             idno: idno.value,
             sowo: sowo.value,
             zoneno: zoneno.value,
-            zonedeparatment: zonedeparatment.value,
+            zonedepartment: zonedepartment.value,
             contactno: contactno.value,
             gender: gender.value,
             blood: blood.value,
@@ -77,9 +77,11 @@ form.onsubmit = async (e) => {
     if (response.code === -1) window.location.href = "/admin/login.html";
 
     name.value = "";
-    center.value = "";
-    subcenter.value = "";
-    department.value = "";
+    idno.value = "";
+    sowo.value = "";
+    zoneno.value = "";
+    zonedepartment.value = "";
+    contactno.value = "";
 
     err.innerHTML = "Employee " + response.data.employeeID + " has been added.";
 

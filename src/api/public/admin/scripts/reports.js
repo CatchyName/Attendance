@@ -2,8 +2,6 @@ const form = document.getElementById("form");
 const id = document.getElementById("cID");
 const err = document.getElementById("err");
 
-const sessionID = localStorage.getItem("sessionID");
-
 
 form.onsubmit = async (e) => {
     e.preventDefault();
@@ -28,12 +26,10 @@ form.onsubmit = async (e) => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            sessionID: sessionID,
             centerID: parsedID
         }),
     }).then(res => res.json());
 
-    console.log(response);
 
     if (response[0] === -1) window.location.href = "/admin/login.html";
 

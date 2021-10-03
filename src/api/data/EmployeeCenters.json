@@ -1,4 +1,17 @@
 {
-    "YEREVAN": [],
-    "ALASHKERT": []
+	"YEREVAN": [
+		10001,
+		0,
+		0
+	],
+	"SAHARANPUR-II": [
+		20001
+	],
+	"SAHARANPUR-I": [
+		30001,
+		30002
+	],
+	"ISLAMNAGAR": [
+		40001
+	]
 }

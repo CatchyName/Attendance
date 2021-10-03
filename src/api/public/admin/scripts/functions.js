@@ -16,11 +16,18 @@ const CheckSession = async () => {
 }
 
 const GetEmployees = async () => {
+    let response = await fetch("/admin/getemployees", {
+        mode: 'cors',
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+    }).then(res => res.json());
 
-}
-
-const GetEmployee = async (employeeID) => {
-
+    if (response.code === -1) window.location.href = "/admin/login.html";
+    if (response.code !== 0) return false;
+    return response.data
 }
 
 const GetCenters = async () => {
@@ -36,10 +43,6 @@ const GetCenters = async () => {
     if (response.code === -1) window.location = "/admin/login.html";
     if (response.code === 0) return response.data;
     else return false;
-}
-
-const GetCenter = async (centerID) => {
-
 }
 
 const GetSubcenters = async (centerID) => {
@@ -60,8 +63,59 @@ const GetSubcenters = async (centerID) => {
     else return false;
 }
 
-const GetSubcenter = async (centerID, subID) => {
+const GetCenterName = async (centerID) => {
+    let response = await fetch("/admin/getcenter", {
+        mode: 'cors',
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            centerID: centerID
+        })
+    }).then(res => res.json());
 
+    if (response.code === -1) window.location = "/admin/login.html";
+    if (response.code === 0) return response.data;
+    else return false;
+}
+
+const GetSubcenterName = async (centerID, subcenterID) => {
+    let response = await fetch("/admin/getsubcenter", {
+        mode: 'cors',
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            centerID: centerID,
+            subcenterID, subcenterID
+        })
+    }).then(res => res.json());
+
+    if (response.code === -1) window.location = "/admin/login.html";
+    if (response.code === 0) return response.data;
+    else return false;
+}
+
+const GetDepartmentName = async (departmentID) => {
+    let response = await fetch("/admin/getdepartment", {
+        mode: 'cors',
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            departmentID, departmentID
+        })
+    }).then(res => res.json());
+
+    if (response.code === -1) window.location = "/admin/login.html";
+    if (response.code === 0) return response.data;
+    else return false;
 }
 
 const GetDepartments = async () => {

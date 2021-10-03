@@ -69,7 +69,7 @@ const AddEmployee = (name, centerName, subcenterName, departmentName, idno, sowo
         "sowo": sowo,
         "gender": gender,
         "zoneno": zoneno,
-        "zonedeparatment": zonedep,
+        "zonedepartment": zonedep,
         "contactno": contactno,
         "blood": blood,
         "uuid": "",
@@ -116,18 +116,18 @@ const AddEmployees = async (filename) => {
         const blood = row.getCell(16).value;
         const department = row.getCell(17).value;
         const zoneno = row.getCell(19).value;
-        const zonedeparatment = row.getCell(20).value;
+        const zonedepartment = row.getCell(20).value;
         const center = row.getCell(23).value;
         const subcenter = row.getCell(22).value;
 
-        ids.push(AddEmployee(name, center, subcenter, department, idno, sowo, gender, zoneno, zonedeparatment, contactno, blood));
+        ids.push(AddEmployee(name, center, subcenter, department, idno, sowo, gender, zoneno, zonedepartment, contactno, blood));
     }
 
     return ids;
 }
 
 const DeleteEmployee = (employeeID) => {
-    let centername = Centers.CenterName(Math.Floor(employeeID / 10000));
+    let centername = Centers.CenterName(Math.floor(employeeID / 10000));
 
     // Remove Emoployee from the center list
     let ec = EmployeeCenters();
@@ -136,7 +136,7 @@ const DeleteEmployee = (employeeID) => {
 
 
     // Remove Employee from all employees list
-    let emps = GetEmployees();
+    let emps = Employees();
     for (let i = 0; i < emps.length; i++) {
         if (emps[i] === employeeID) {
             emps.splice(i, 1);
@@ -174,8 +174,8 @@ const Clear = () => {
     const employees = Employees();
 
     for (let i = 0; i < employees.length; i++) {
-        fs.unlinkSync(path.resolve(__dirname, "../data/Employees/" + employeeID + ".json"));
-        fs.unlinkSync(path.resolve(__dirname, "../public/photos/" + employeeID + ".png"));
+        fs.unlinkSync(path.resolve(__dirname, "../data/Employees/" + employees[i] + ".json"));
+        fs.unlinkSync(path.resolve(__dirname, "../public/photos/" + employees[i] + ".png"));
     }
 
     SetEmployees([]);

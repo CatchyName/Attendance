@@ -3,18 +3,26 @@ const fs = require("fs");
 const path = require("path");
 const sha256 = require("sha256");
 const Info = require("./Info");
-const Employees = require("./Employees");
 
-let sessions = {};
-
-const EmployeesNumber = () => {
-    return JSON.parse(fs.readFileSync(path.resolve(__dirname, "../data/Employee.json")));
+const EmployeeCenters = () => {
+    return JSON.parse(fs.readFileSync(path.resolve(__dirname, "../data/EmployeeCenters.json")));
 }
 
-const SetEmployeesNumber = (data) => {
-    fs.writeFileSync(path.resolve(__dirname, "../data/Employee.json"), JSON.stringify(data, null, "\t"));
+const SetEmployeeCenters = (data) => {
+    fs.writeFileSync(path.resolve(__dirname, "../data/EmployeeCenters.json"), JSON.stringify(data, null, "\t"));
     return;
 }
+
+const EmployeeDepartments = () => {
+    return JSON.parse(fs.readFileSync(path.resolve(__dirname, "../data/Employeedepartments.json")));
+}
+
+const SetEmployeeDepartments = (data) => {
+    fs.writeFileSync(path.resolve(__dirname, "../data/EmployeeDepartments.json"), JSON.stringify(data, null, "\t"));
+    return;
+}
+
+let sessions = {};
 
 const Login = (password) => {
 
@@ -62,9 +70,9 @@ const AddCenter = (name) => {
     const centerID = centers.length;
     centernames[name.toUpperCase()] = centerID;
 
-    let ec = Employees.EmployeeCenters();
-    ec[centername] = [];
-    Employees.SetEmployeeCenters(ec);
+    let ec = EmployeeCenters();
+    ec[name.toUpperCase()] = [];
+    SetEmployeeCenters(ec);
 
     fs.writeFileSync(path.resolve(__dirname, "../data/Centers.json"), JSON.stringify(centers, null, "\t"));
     fs.writeFileSync(path.resolve(__dirname, "../data/CenterNames.json"), JSON.stringify(centernames, null, "\t"));
@@ -74,8 +82,15 @@ const AddCenter = (name) => {
 }
 
 const Clear = () => {
+    let centers = GetCenters();
+    for (let i = 0; i < centers.length; i++) {
+        fs.unlinkSync(path.resolve(__dirname, "../data/Centers/" + (i + 1) + ".json"));
+    }
     fs.writeFileSync(path.resolve(__dirname, "../data/Centers.json"), JSON.stringify([], null, "\t"));
     fs.writeFileSync(path.resolve(__dirname, "../data/CenterNames.json"), JSON.stringify({}, null, "\t"));
+    fs.writeFileSync(path.resolve(__dirname, "../data/Departments.json"), JSON.stringify([], null, "\t"));
+    fs.writeFileSync(path.resolve(__dirname, "../data/Employeecenters.json"), JSON.stringify({}, null, "\t"));
+    fs.writeFileSync(path.resolve(__dirname, "../data/EmployeeDepartments.json"), JSON.stringify({}, null, "\t"));
     return true;
 }
 

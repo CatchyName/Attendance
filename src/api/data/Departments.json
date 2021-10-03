@@ -1,5 +1,8 @@
 [
-    "PRESIDENT",
-    "SECRETARY",
-    "STAFF"
+	"STAFF",
+	"ADMIN",
+	"SECRETARY",
+	"PRESIDENT",
+	"PANDAL",
+	"LANGAR"
 ]

@@ -1,7 +1,5 @@
-const containter = document.getElementById("employees");
+const table = document.getElementById("table");
 const err = document.getElementById("err");
-
-const sessionID = localStorage.getItem("sessionID");
 
 const GetEmployeeData = async (employeeID) => {
     let response = await fetch("/admin/getemployeedata", {
@@ -12,19 +10,18 @@ const GetEmployeeData = async (employeeID) => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            sessionID: sessionID,
             employeeID: employeeID
         })
     }).then(res => res.json());
 
-    if (response[0] === -1) window.location.href = "/admin/login.html";
-
-    return response[0];
+    if (response.code === -1) window.location = "/admin/login.html";
+    if (response.code === 0) return response.data;
+    else return false;
 }
 
-const GetEmployees = async () => {
-
-    let response = await fetch("/admin/getemployees", {
+const DeleteEmployee = async (employeeID) => {
+    console.log(employeeID);
+    let response = await fetch("/admin/deleteemployee", {
         mode: 'cors',
         method: 'POST',
         headers: {
@@ -32,23 +29,74 @@ const GetEmployees = async () => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            sessionID: sessionID
+            employeeID: employeeID
         })
     }).then(res => res.json());
 
-    if (response[0] === -1) window.location.href = "/admin/login.html";
+    location.reload();
+}
 
-    const EmployeesList = response[0];
+const ShowEmployees = async () => {
 
-    let string = "";
+    const EmployeesList = await GetEmployees();
 
     for (let i = 0; i < EmployeesList.length; i++) {
+        const row = document.createElement("tr");
         const EmployeeData = await GetEmployeeData(EmployeesList[i]);
-        string += `<p>${EmployeeData.id} : <a href="/admin/employee.html?id=${EmployeeData.id}">${EmployeeData.name}</a><ps>`;
-    }
 
-    containter.innerHTML = string;
+        const td0 = document.createElement("td");
+        const a = document.createElement("a");
+        a.href = `/admin/employee.html?id=${EmployeeData.id}`;
+        a.innerHTML = EmployeeData.id;
+        td0.appendChild(a);
+        row.appendChild(td0);
+        const td1 = document.createElement("td");
+        td1.innerHTML = EmployeeData.idno;
+        row.appendChild(td1);
+        const td2 = document.createElement("td");
+        td2.innerHTML = EmployeeData.name;
+        row.appendChild(td2);
+        const td3 = document.createElement("td");
+        td3.innerHTML = EmployeeData.gender;
+        row.appendChild(td3);
+        const td4 = document.createElement("td");
+        td4.innerHTML = await GetCenterName(EmployeeData.center);
+        row.appendChild(td4);
+        const td5 = document.createElement("td");
+        td5.innerHTML = await GetSubcenterName(EmployeeData.center, EmployeeData.subcenter);
+        row.appendChild(td5);
+        const td6 = document.createElement("td");
+        td6.innerHTML = await GetDepartmentName(EmployeeData.department);
+        row.appendChild(td6);
+        const td7 = document.createElement("td");
+        td7.innerHTML = EmployeeData.contactno;
+        row.appendChild(td7);
+        const td8 = document.createElement("td");
+        td8.innerHTML = EmployeeData.zoneno;
+        row.appendChild(td8);
+        const td9 = document.createElement("td");
+        td9.innerHTML = EmployeeData.zonedepartment;
+        row.appendChild(td9);
+        const td10 = document.createElement("td");
+        td10.innerHTML = EmployeeData.sowo;
+        row.appendChild(td10);
+        const td11 = document.createElement("td");
+        td11.innerHTML = EmployeeData.blood;
+        row.appendChild(td11);
+
+        const td12 = document.createElement("td");
+        const del = document.createElement("button");
+        del.innerHTML = "Delete";
+        del.onclick = function () {
+            DeleteEmployee(EmployeeData.id);
+        }
+        td12.appendChild(del);
+        row.appendChild(td12);
+
+        table.appendChild(row);
+    }
 
 }
 
-GetEmployees();
+CheckSession();
+ShowEmployees();
