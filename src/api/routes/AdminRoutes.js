@@ -35,7 +35,7 @@ const photoupload = multer({ storage: filePhotoEngine });
 
 router.post("/login", express.json(), Admin.Login);
 router.use(cookieParser());
-// router.use(Admin.ValidateCookie);
+router.use(Admin.ValidateCookie);
 
 router.post("/uploadfile", upload.single("sheet"), (req, res) => {
     AdminController.AddEmployees(req.file.filename);
