@@ -28,17 +28,17 @@ const CreateID = async (employeeID) => {
     ctx.drawImage(photo, 0, 0, photo.width, photo.height, 219, 325, 200, 270);
     ctx.drawImage(barcode, (637.5 - barcode.width) / 2, 835, barcode.width, barcode.height);
     ctx.fillStyle = "black";
-    ctx.font = '35px Sans-serif'
+    ctx.font = '35px sans-serif'
     ctx.fillText("RADHA SOAMI SATSANG BEAS", 125, 90);
 
     ctx.fillStyle = "#1d3d96";
     ctx.fillRect(0, 150, 637.5, 100);
     ctx.fillStyle = "white";
     ctx.textAlign = "center";
-    ctx.font = "50px Sans-serif";
+    ctx.font = "50px sans-serif";
     ctx.fillText(Centers.DepartmentName(employee.department), 320, 220);
 
-    ctx.font = "35px Sans-serif";
+    ctx.font = "35px sans-serif";
     ctx.fillStyle = "black"
     ctx.fillText(Centers.SubcenterName(employee.center, employee.subcenter) + " (" + Centers.CenterName(employee.center) + ")", 320, 300);
 
@@ -48,7 +48,7 @@ const CreateID = async (employeeID) => {
 
     ctx.textAlign = "left";
     ctx.fillStyle = "black";
-    ctx.font = "25px Sans-serif";
+    ctx.font = "25px sans-serif";
     ctx.fillText("ID no.", 80, 710);
     ctx.fillText("Zone Badge No.", 80, 740);
     ctx.fillText("Sewa at M. C.", 80, 770);
