@@ -1,1 +1,12 @@
-{}
+{
+	"SAHARANPUR-II": [
+		10001
+	],
+	"SAHARANPUR-I": [
+		20001,
+		20002
+	],
+	"ISLAMNAGAR": [
+		30001
+	]
+}

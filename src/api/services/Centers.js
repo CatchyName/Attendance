@@ -14,7 +14,7 @@ const SetEmployeeCenters = (data) => {
 }
 
 const EmployeeDepartments = () => {
-    return JSON.parse(fs.readFileSync(path.resolve(__dirname, "../data/Employeedepartments.json")));
+    return JSON.parse(fs.readFileSync(path.resolve(__dirname, "../data/EmployeeDepartments.json")));
 }
 
 const SetEmployeeDepartments = (data) => {
