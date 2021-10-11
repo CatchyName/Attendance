@@ -26,8 +26,7 @@ let sessions = {};
 
 const Login = (password) => {
 
-    if (sha256(password) !== Info.GetTerminalPassword()) return false;
-
+    if (!Info.CheckTerminalPassword(password)) return false;
 
     const sessionID = uuidv4();
     sessions[sessionID] = Date.now();
@@ -53,6 +52,15 @@ const GetCenters = () => {
     return centers;
 }
 
+const GetAllSubCenters = () => {
+    const centers = GetCenters();
+    let data = [];
+    for (let i = 0; i < centers.length; i++) {
+        data.push(GetSubCenters(i + 1));
+    }
+    return data;
+}
+
 const GetCenterNames = () => {
     const centers = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../data/CenterNames.json")));
     return centers;
@@ -74,6 +82,10 @@ const AddCenter = (name) => {
     ec[name.toUpperCase()] = [];
     SetEmployeeCenters(ec);
 
+    let centersessions = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../data/CenterSessions.json")));
+    centersessions.push([]);
+    fs.writeFileSync(path.resolve(__dirname, "../data/CenterSessions.json"), JSON.stringify(centersessions, null, "\t"));
+
     fs.writeFileSync(path.resolve(__dirname, "../data/Centers.json"), JSON.stringify(centers, null, "\t"));
     fs.writeFileSync(path.resolve(__dirname, "../data/CenterNames.json"), JSON.stringify(centernames, null, "\t"));
     fs.writeFileSync(path.resolve(__dirname, "../data/Centers/" + centerID + ".json"), JSON.stringify([], null, "\t"));
@@ -91,6 +103,12 @@ const Clear = () => {
     fs.writeFileSync(path.resolve(__dirname, "../data/Departments.json"), JSON.stringify([], null, "\t"));
     fs.writeFileSync(path.resolve(__dirname, "../data/Employeecenters.json"), JSON.stringify({}, null, "\t"));
     fs.writeFileSync(path.resolve(__dirname, "../data/EmployeeDepartments.json"), JSON.stringify({}, null, "\t"));
+    fs.writeFileSync(path.resolve(__dirname, "../data/EmployeeSessions.json"), JSON.stringify({}, null, "\t"));
+    fs.writeFileSync(path.resolve(__dirname, "../data/DaySessions.json"), JSON.stringify({}, null, "\t"));
+    fs.writeFileSync(path.resolve(__dirname, "../data/CenterSessions.json"), JSON.stringify([], null, "\t"));
+    fs.writeFileSync(path.resolve(__dirname, "../data/DepartmentSessions.json"), JSON.stringify([], null, "\t"));
+    fs.writeFileSync(path.resolve(__dirname, "../data/GenderSessions.json"), JSON.stringify({ "MALE": [], "FEMALE": [] }, null, "\t"));
+
     return true;
 }
 
@@ -130,14 +148,30 @@ const AddSubCenter = (centerID, name) => {
 
     let subcenters = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../data/Centers/" + centerID + ".json")));
     subcenters.push(name.toUpperCase());
+
+    let centersessions = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../data/CenterSessions.json")));
+
+    centersessions[centerID - 1].push([]);
+    fs.writeFileSync(path.resolve(__dirname, "../data/CenterSessions.json"), JSON.stringify(centersessions, null, "\t"));
     fs.writeFileSync(path.resolve(__dirname, "../data/Centers/" + centerID + ".json"), JSON.stringify(subcenters, null, "\t"));
 
     return subcenters.length;
 }
 
 const AddDepartment = (departmentName) => {
+
+    let departmentsessions = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../data/DepartmentSessions.json")));
+
     const departments = GetDepartments();
     departments.push(departmentName.toUpperCase());
+    departmentsessions.push([]);
+    fs.writeFileSync(path.resolve(__dirname, "../data/DepartmentSessions.json"), JSON.stringify(departmentsessions, null, "\t"));
+
+
+    let ed = EmployeeDepartments();
+    ed[departmentName.toUpperCase()] = [];
+    SetEmployeeDepartments(ed);
+
     fs.writeFileSync(path.resolve(__dirname, "../data/Departments.json"), JSON.stringify(departments, null, "\t"));
     return departments.length;
 }
@@ -171,5 +205,6 @@ module.exports = {
     SubcenterName,
     DepartmentName,
     Clear,
-    GetDepartments
+    GetDepartments,
+    GetAllSubCenters
 }

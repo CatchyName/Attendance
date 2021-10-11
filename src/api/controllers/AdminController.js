@@ -33,6 +33,10 @@ const ChangeAdminPassword = (oldpass, newpass) => {
     return Admin.ChangeAdminPassword(oldpass, newpass);
 }
 
+const ChangeUserPassword = (oldpass, newpass) => {
+    return Admin.ChangeUserPassword(oldpass, newpass);
+}
+
 const EmployeeReport = async (employeeID) => {
     return await Report.EmployeeReport(employeeID);
 }
@@ -117,6 +121,7 @@ module.exports = {
     Login,
     ChangeTerminalPassword,
     ChangeAdminPassword,
+    ChangeUserPassword,
     CheckSession,
     GenerateBarcode,
     GenerateBarcodes,

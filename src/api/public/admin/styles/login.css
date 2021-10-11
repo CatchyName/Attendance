@@ -1,8 +1,22 @@
-* {
-    margin: 0;
-    padding: 0;
+#p {
+    color: white;
 }
 
-body {
-    text-align: center;
+#password {
+    width: 300px;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+
+#submit {
+    width: 200px;
+    padding: 12px 20px;
+    text-decoration: none;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+
+#error {
+    color: white;
 }

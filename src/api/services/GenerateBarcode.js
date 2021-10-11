@@ -10,7 +10,11 @@ const GenerateBarcode = employeeID => {
     if (!employee) return false;
 
     const canvas = createCanvas();
-    JsBarcode(canvas, employeeID.toString());
+    JsBarcode(canvas, employeeID.toString(), {
+        height: 120,
+        width: 3,
+        fontSize: 30
+    });
 
     fs.writeFileSync(path.resolve(__dirname, "../public/barcodes/" + employeeID + ".png"), canvas.toBuffer('image/png'));
     return "/barcodes/" + employeeID + ".png";

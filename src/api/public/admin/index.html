@@ -6,25 +6,37 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
+    <meta name="theme-color" content="#cc1f00">
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/index.css">
+
 </head>
 
 <body>
-    <h1>Hi Admin!</h1>
+    <header onclick="window.location = '/admin'">
+        <h1> Admin Panel</h1>
+    </header>
 
     <p id="status"></p>
+    <h3>Employee Functions</h3>
     <button onclick="window.location = '/admin/addemployee.html'">Add Employee</button><br>
     <button onclick="window.location = '/admin/addemployees.html'">Add Employees</button><br>
     <button onclick="window.location = '/admin/employees.html'">Browse Employees</button><br>
-    <br>
+    <h3>Center/Subcenter/Department Functions</h3>
     <button onclick="window.location = '/admin/addcenter.html'">Add Center</button><br>
     <button onclick="window.location = '/admin/addsubcenter.html'">Add Subcenter</button><br>
     <button onclick="window.location = '/admin/adddepartment.html'">Add Department</button><br>
     <button onclick="window.location = '/admin/centers.html'">Browse Centers</button><br>
     <button onclick="window.location = '/admin/departments.html'">Browse Departments</button><br>
-    <br>
+    <h3>Reports and ID Cards</h3>
+    <button onclick="window.location = '/admin/sessions.html'">Employees live count</button><br>
     <button onclick="window.location = '/admin/cards.html'">Generate Cards</button><br>
-    <button onclick="window.location = '/admin/reports.html'">Generate Development Center Report</button><br>
-    <br>
+    <button onclick="window.location = '/admin/reports.html'">Generate Center Report</button><br>
+    <!-- <button onclick="window.location = '/admin/subreport.html'">Generate Subcenter Report</button><br> -->
+    <button onclick="window.location = '/admin/departmentreport.html'">Generate Department report</button><br>
+    <button onclick="window.location = '/admin/genderreport.html'">Generate Gender Report</button><br>
+    <!-- <button onclick="window.location = '/admin/dayreport.html'">Generate Day Report</button><br> -->
+    <h3>Change Passwords</h3>
     <button onclick="window.location = '/admin/changeadminpass.html'">Change Admin Password</button><br>
     <button onclick="window.location = '/admin/changeterminalpass.html'">Change Terminal Password</button><br>
     <script src="scripts/script.js"></script>

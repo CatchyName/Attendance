@@ -23,22 +23,20 @@ router.post("/scan", (req, res) => {
             const employeeID = parseInt(req.body.employeeID);
 
             if (!employeeID || employeeID < 10000 || employeeID > 999999 || employeeID < 0) {
-                res.send(false);
+                res.send({ code: -2, msg: "Invalaid employee ID" });
             } else {
                 res.send(TerminalController.Scan(employeeID, center));
             }
 
         } else {
             res.status(404);
-            res.send(false);
+            res.send({ code: -3, msg: "Center not found" });
             return;
         }
 
-
-
     } else {
         res.status(401);
-        res.send(false);
+        res.send({ code: -4, msg: "Invalid Session" });
         return;
     }
 

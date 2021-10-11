@@ -1,24 +1,6 @@
 const table = document.getElementById("table");
 const err = document.getElementById("err");
 
-const GetEmployeeData = async (employeeID) => {
-    let response = await fetch("/admin/getemployeedata", {
-        mode: 'cors',
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            employeeID: employeeID
-        })
-    }).then(res => res.json());
-
-    if (response.code === -1) window.location = "/admin/login.html";
-    if (response.code === 0) return response.data;
-    else return false;
-}
-
 const DeleteEmployee = async (employeeID) => {
     console.log(employeeID);
     let response = await fetch("/admin/deleteemployee", {
@@ -38,11 +20,16 @@ const DeleteEmployee = async (employeeID) => {
 
 const ShowEmployees = async () => {
 
-    const EmployeesList = await GetEmployees();
+    err.innerHTML = "Loading employees...";
+    const EmployeesData = await GetEmployeesData();
 
-    for (let i = 0; i < EmployeesList.length; i++) {
+    const CenterNames = await GetCenters();
+    const DepartNames = await GetDepartments();
+    const SubcenterNames = await GetAllSubcenters();
+
+    for (let i = 0; i < EmployeesData.length; i++) {
         const row = document.createElement("tr");
-        const EmployeeData = await GetEmployeeData(EmployeesList[i]);
+        const EmployeeData = EmployeesData[i];
 
         const td0 = document.createElement("td");
         const a = document.createElement("a");
@@ -60,13 +47,13 @@ const ShowEmployees = async () => {
         td3.innerHTML = EmployeeData.gender;
         row.appendChild(td3);
         const td4 = document.createElement("td");
-        td4.innerHTML = await GetCenterName(EmployeeData.center);
+        td4.innerHTML = CenterNames[EmployeeData.center - 1];
         row.appendChild(td4);
         const td5 = document.createElement("td");
-        td5.innerHTML = await GetSubcenterName(EmployeeData.center, EmployeeData.subcenter);
+        td5.innerHTML = SubcenterNames[EmployeeData.center - 1][EmployeeData.subcenter - 1];
         row.appendChild(td5);
         const td6 = document.createElement("td");
-        td6.innerHTML = await GetDepartmentName(EmployeeData.department);
+        td6.innerHTML = DepartNames[EmployeeData.department - 1];
         row.appendChild(td6);
         const td7 = document.createElement("td");
         td7.innerHTML = EmployeeData.contactno;
@@ -94,6 +81,13 @@ const ShowEmployees = async () => {
         row.appendChild(td12);
 
         table.appendChild(row);
+
+    }
+
+    if (EmployeesData.length === 0) {
+        err.innerHTML = "No Employees";
+    } else {
+        err.innerHTML = "";
     }
 
 }

@@ -6,9 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Data</title>
+    <link rel="stylesheet" href="styles/style.css">
 </head>
 
 <body>
+    <header onclick="window.location = '/admin'">
+        <h1>Employee Report</h1>
+    </header>
     <h1 id="title">Loading...</h1>
     <div id="employee">
         <img id="photo" style="width: 200px; height: 267px; object-fit: cover; object-position: 50% 0;">
@@ -29,7 +33,8 @@
 
     </div>
     <p id="err"></p>
-    <script defer src="getemployee.js"></script>
+    <script defer src="scripts/functions.js"></script>
+    <script defer src="scripts/getemployee.js"></script>
 </body>
 
 </html>

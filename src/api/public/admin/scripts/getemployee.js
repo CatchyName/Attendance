@@ -7,100 +7,19 @@ const err = document.getElementById("err");
 const table = document.getElementById("table");
 const img = document.getElementById("photo");
 
-const sessionID = localStorage.getItem("sessionID");
-
 const url = new URL(window.location);
 const EmployeeID = url.searchParams.get("id");
 
 let EmployeeData;
 
-const GetEmployeeData = async (employeeID) => {
-    let response = await fetch("/admin/getemployeedata", {
-        mode: 'cors',
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            sessionID: sessionID,
-            employeeID: employeeID
-        })
-    }).then(res => res.json());
-
-    if (response[0] === -1) window.location.href = "/admin/login.html";
-    if (response[0] === false) {
+const LoadEmployee = async () => {
+    const data = await GetEmployeeData(EmployeeID);
+    if (!data) {
         err.innerHTML = "Employee not found. Redirecting in 5 seconds...";
         window.setTimeout(function () {
             window.location.href = "/admin/employees.html"
         }, 5000);
-        return false;
     }
-
-    return response[0];
-}
-
-const GetCenterName = async (centerID) => {
-    let response = await fetch("/admin/getcenter", {
-        mode: 'cors',
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            sessionID: sessionID,
-            centerID: centerID
-        })
-    }).then(res => res.json());
-
-    if (response[0] === -1) window.location.href = "/admin/login.html";
-
-    return response[0];
-}
-
-const GetSubcenterName = async (centerID, subcenterID) => {
-    let response = await fetch("/admin/getsubcenter", {
-        mode: 'cors',
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            sessionID: sessionID,
-            centerID: centerID,
-            subcenterID, subcenterID
-        })
-    }).then(res => res.json());
-
-    if (response[0] === -1) window.location.href = "/admin/login.html";
-
-    return response[0];
-}
-
-const GetDepartmentName = async (departmentID) => {
-    let response = await fetch("/admin/getdepartment", {
-        mode: 'cors',
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            sessionID: sessionID,
-            departmentID, departmentID
-        })
-    }).then(res => res.json());
-
-    if (response[0] === -1) window.location.href = "/admin/login.html";
-
-    return response[0];
-}
-
-const LoadEmployee = async () => {
-    const data = await GetEmployeeData(EmployeeID);
-    if (!data) return false;
     EmployeeData = data;
 
     form.action = "/admin/setphoto/" + data.id;
@@ -156,15 +75,14 @@ const GetReport = async () => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            sessionID, sessionID,
             employeeID: EmployeeID,
         }),
     }).then(res => res.json());
 
-    if (response[0] === -1) window.location.href = "/admin/login.html";
+    if (response.code === -1) window.location.href = "/admin/login.html";
 
-    if (response[0]) {
-        window.open(response, "_blank").focus();
+    if (response.code === 0) {
+        window.open(response.data, "_blank").focus();
     } else {
         err.innerHTML = "Something went wrong!";
     }
@@ -179,8 +97,7 @@ const GetCard = async () => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            sessionID, sessionID,
-            employeeID: EmployeeID,
+            employeeID: EmployeeID
         }),
     }).then(res => res.json());
 
@@ -198,4 +115,5 @@ const DeleteEmployee = async () => {
 
 }
 
+CheckSession();
 LoadEmployee();

@@ -15,7 +15,9 @@ const EmployeeReport = async (employeeID) => {
     const workbook = new exceljs.Workbook();
     workbook.creator = "Attendance Server";
 
-    const sheet = workbook.addWorksheet(employeeID.toString(), { properties: { tabColor: { rgb: 'FFFFFF' } } });
+    const sheet = workbook.addWorksheet(employee.name.toString(), { properties: { tabColor: { rgb: 'FFFFFF' } } });
+
+    sheet.properties.defaultColWidth = 25;
 
     sheet.addRow([
         employee.name,
@@ -36,12 +38,22 @@ const EmployeeReport = async (employeeID) => {
         let startdate = new Date(s.start);
         let enddate = new Date(s.finish);
 
-        sheet.addRow([
+        row = sheet.addRow([
             startdate.toDateString(),
-            s.department,
+            s.center,
             startdate.toLocaleTimeString(),
             enddate.toLocaleTimeString()
         ]);
+
+        if (s.forgot === true) {
+            row.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: 'ff0000' }
+            }
+        }
+
+
     });
 
     const id = uuidv4();
@@ -58,20 +70,20 @@ const CenterReport = async (centerID) => {
 
     const workbook = new exceljs.Workbook();
     workbook.creator = "Attendance Server";
-    const en = Employees.EmployeesNumber();
-    const emps = en[centerID - 1];
+    const en = Employees.EmployeeCenters();
+    const emps = en[center];
 
 
-    for (let i = 0; i < emps; i++) {
+    for (let i = 0; i < emps.length; i++) {
 
-        let employee = Employees.GetEmployee(centerID * 10000 + i + 1);
+        let employee = Employees.GetEmployee(emps[i]);
         const employeeID = employee.id;
 
         if (!employee) {
             continue;
         }
 
-        const sheet = workbook.addWorksheet(employeeID.toString(), { properties: { tabColor: { rgb: 'FFFFFF' } } });
+        const sheet = workbook.addWorksheet(employee.name.toString(), { properties: { tabColor: { rgb: 'FFFFFF' } } });
 
         sheet.addRow([
             employee.name,
@@ -92,12 +104,21 @@ const CenterReport = async (centerID) => {
             let startdate = new Date(s.start);
             let enddate = new Date(s.finish);
 
-            sheet.addRow([
+            row = sheet.addRow([
                 startdate.toDateString(),
-                s.department,
+                s.center,
                 startdate.toLocaleTimeString(),
                 enddate.toLocaleTimeString()
             ]);
+
+            if (s.forgot === true) {
+                row.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: 'ff0000' }
+                }
+            }
+
         });
     }
 
@@ -106,9 +127,79 @@ const CenterReport = async (centerID) => {
     return "/reports/" + center + id + ".xlsx";
 }
 
+const SubcenterReport = async (centerID, subcenterID) => {
 
+}
+
+const DepartmentReport = async (departmentID) => {
+    let department = Centers.DepartmentName(departmentID);
+
+    if (!department) {
+        return false;
+    }
+
+    const workbook = new exceljs.Workbook();
+    workbook.creator = "Attendance Server";
+    const en = Employees.EmployeeDepartments();
+    const emps = en[department];
+
+
+    for (let i = 0; i < emps.length; i++) {
+
+        let employee = Employees.GetEmployee(emps[i]);
+        const employeeID = employee.id;
+
+        if (!employee) {
+            continue;
+        }
+
+        const sheet = workbook.addWorksheet(employee.name.toString(), { properties: { tabColor: { rgb: 'FFFFFF' } } });
+
+        sheet.addRow([
+            employee.name,
+            Centers.CenterName(employee.center),
+            Centers.SubcenterName(employee.center, employee.subcenter),
+            Centers.DepartmentName(employee.department)
+        ]);
+
+        sheet.addRow([
+            "Day",
+            "Center",
+            "Start",
+            "Finish"
+        ]);
+
+        employee.sessions.forEach(s => {
+
+            let startdate = new Date(s.start);
+            let enddate = new Date(s.finish);
+
+            row = sheet.addRow([
+                startdate.toDateString(),
+                s.center,
+                startdate.toLocaleTimeString(),
+                enddate.toLocaleTimeString()
+            ]);
+
+            if (s.forgot === true) {
+                row.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: 'ff0000' }
+                }
+            }
+
+        });
+    }
+
+    const id = uuidv4();
+    await workbook.xlsx.writeFile(path.resolve(__dirname, "../public/reports/" + department + id + ".xlsx"));
+    return "/reports/" + department + id + ".xlsx";
+}
 
 module.exports = {
     EmployeeReport,
     CenterReport,
+    SubcenterReport,
+    DepartmentReport,
 };

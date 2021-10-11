@@ -6,10 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Employee</title>
+    <link rel="stylesheet" href="styles/style.css">
 </head>
 
 <body>
-    <h1>Add employee</h1>
+    <header onclick="window.location = '/admin'">
+        <h1>Add employee</h1>
+    </header>
     <form id="form">
         Employee Name: <input type="text" id="name"><br>
         Id Number: <input type="text" id="idno"><br>
@@ -34,7 +37,7 @@
         Development Center: <select id="center"></select><br>
         Sub Center: <select id="subcenter"></select><br>
         Department: <select id="department"></select><br>
-        <input type="submit" id="submit"><br>
+        <input type="submit" id="submit" value="Add Employee"><br>
     </form>
     <p id="err"></p>
     <script defer src="scripts/functions.js"></script>

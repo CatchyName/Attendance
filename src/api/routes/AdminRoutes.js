@@ -3,15 +3,10 @@ const multer = require("multer");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const fs = require("fs");
-const { v4: uuidv4 } = require("uuid");
-const { AdminController, TerminalController } = require("../controllers");
+const { AdminController } = require("../controllers");
 const { Admin } = require("../middleware");
-const { Centers, Employees, Card, Sessions } = require("../services");
+const { Centers, Employees, Card, Sessions, Report } = require("../services");
 const router = express.Router();
-
-// Send Report every month
-// cron.schedule("0 0 1 * *", () => AdminController.SendReport()); 
-
 
 const fileStorageEngine = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -40,7 +35,7 @@ const photoupload = multer({ storage: filePhotoEngine });
 
 router.post("/login", express.json(), Admin.Login);
 router.use(cookieParser());
-router.use(Admin.ValidateCookie);
+// router.use(Admin.ValidateCookie);
 
 router.post("/uploadfile", upload.single("sheet"), (req, res) => {
     AdminController.AddEmployees(req.file.filename);
@@ -50,6 +45,10 @@ router.post("/uploadfile", upload.single("sheet"), (req, res) => {
 router.post("/setphoto/:id", photoupload.single("photo"), async (req, res) => {
     const id = req.params.id;
     const filename = req.file.filename;
+    if (!filename) {
+        res.redirect("/admin/employees.html");
+        return;
+    }
     Card.ChangePhoto(await parseInt(id), filename);
     res.redirect("/admin/employees.html");
 });
@@ -59,12 +58,36 @@ router.use(express.json());
 // Check session
 
 router.get("/check", (req, res) => {
-    res.send({ code: 0 });
-})
+    res.send({ code: 0, msg: "Hi Admin!" });
+});
 
 // Number of employees currently working
 router.get("/present", (req, res) => {
-    res.send({ code: 0, data: Sessions.ActiveSessions() });
+    res.send({ code: 0, msg: "Successful request.", data: Sessions.ActiveSessions() });
+});
+
+router.get("/sessions", (req, res) => {
+    res.send({ code: 0, msg: "Successful request.", data: Sessions.ActiveEmployees() });
+});
+
+router.post("/departmentsessions", (req, res) => {
+    res.send({ code: 0, msg: "Successful request.", data: Sessions.DepartmentSessions(req.body.departmentID) });
+});
+
+router.post("/centersessions", (req, res) => {
+    res.send({ code: 0, msg: "Successful request.", data: Sessions.CenterSessions(req.body.centerID) });
+});
+
+router.post("/subcentersessions", (req, res) => {
+    res.send({ code: 0, msg: "Successful request.", data: Sessions.SubcenterSessions(req.body.centerID, req.body.subcenterID) });
+});
+
+router.post("/gendersessions", (req, res) => {
+    res.send({ code: 0, msg: "Successful request.", data: Sessions.GenderSessions(req.body.gender) });
+});
+
+router.post("/daysessions", (req, res) => {
+    res.send({ code: 0, msg: "Successful request.", data: Sessions.DaySessions(req.body.date) });
 });
 
 // Generate ID Cards
@@ -75,26 +98,39 @@ router.post("/card", async (req, res) => {
 
 router.post("/cards", async (req, res) => {
     let cards = await AdminController.GenerateCards();
-    res.send(cards);
+    res.send({ code: 0, data: cards });
 });
 
 router.post("/getcards", (req, res) => {
-    res.send([Card.ZipIDCards()]);
+    res.send({ code: 0, data: Card.ZipIDCards() });
 });
 
 // Generate Reports
 router.post("/report", async (req, res) => {
-    res.send([await AdminController.EmployeeReport(req.body.employeeID)]);
+    res.send({ code: 0, data: await Report.EmployeeReport(req.body.employeeID) });
 });
 
 router.post("/reports", async (req, res) => {
-    res.send([await AdminController.CenterReport(req.body.centerID)]);
+    res.send({ code: 0, data: await Report.CenterReport(req.body.centerID) });
 });
+
+router.post("/subcenterreport", async (req, res) => {
+    res.send({ code: 0, data: await Report.SubcenterReport(req.body.centerID, req.body.subcenterID) });
+});
+
+router.post("/departmentreport", async (req, res) => {
+    res.send({ code: 0, data: await Report.DepartmentReport(req.body.departmentID) });
+});
+
 
 // Add/remove/get Employee(s)
 
 router.get("/getemployees", (req, res) => {
     res.send({ code: 0, msg: "Successful request.", data: AdminController.GetEmployees() });
+});
+
+router.get("/getemployeesdata", (req, res) => {
+    res.send({ code: 0, msg: "Succeful request.", data: Employees.AllEmployeeData() });
 });
 
 router.post("/addemployee", (req, res) => {
@@ -104,6 +140,18 @@ router.post("/addemployee", (req, res) => {
 
 router.post("/getemployeedata", (req, res) => {
     res.send({ code: 0, msg: "Successful request.", data: AdminController.GetEmployee(req.body.employeeID) });
+});
+
+router.post("/getemployeedatafromcenter", (req, res) => {
+    let = response = Employees.CenterEmployeeData(req.body.centername);
+    if (!response) res.send({ code: -2, msg: "Something went wrong" });
+    res.send({ code: 0, msg: "Successful request.", data: response });
+});
+
+router.post("/getemployeedatafromdepartment", (req, res) => {
+    let = response = Employees.DepartmentEmployeedata(req.body.departmentname);
+    if (!response) res.send({ code: -2, msg: "Something went wrong" });
+    res.send({ code: 0, msg: "Successful request.", data: response });
 });
 
 router.post("/deleteemployee", (req, res) => {
@@ -193,6 +241,10 @@ router.get("/getcenters", (req, res) => {
     res.send({ code: 0, msg: "Successful request.", data: Centers.GetCenters() });
 });
 
+router.get("/getallsubcenters", (req, res) => {
+    res.send({ code: 0, msg: "Successful request.", data: Centers.GetAllSubCenters() });
+});
+
 router.post("/getsubcenters", (req, res) => {
     res.send({ code: 0, msg: "Successful request.", data: Centers.GetSubCenters(req.body.centerID) });
 });
@@ -219,6 +271,15 @@ router.post("/changeadminpass", (req, res) => {
     const response = AdminController.ChangeAdminPassword(req.body.oldpass, req.body.newpass)
     if (response) {
         res.send({ code: 0, msg: "Admin password changed successfully." });
+    } else {
+        res.send({ code: 1, msg: "Wrong password." });
+    }
+});
+
+router.post("/changeuserpass", (req, res) => {
+    const response = AdminController.ChangeUserPassword(req.body.oldpass, req.body.newpass)
+    if (response) {
+        res.send({ code: 0, msg: "User password changed successfully." });
     } else {
         res.send({ code: 1, msg: "Wrong password." });
     }

@@ -17,20 +17,50 @@ const CreateID = async (employeeID) => {
 
     const canvas = createCanvas(637.5, 1011);
     const ctx = canvas.getContext('2d');
+    const logo = await loadImage(path.resolve(__dirname, "../data/Logo.png"));
     const photo = await loadImage(path.resolve(__dirname, "../public/photos/" + employeeID + ".png"));
     Barcode.GenerateBarcode(employeeID);
     const barcode = await loadImage(path.resolve(__dirname, "../public/barcodes/" + employeeID + ".png"));
 
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(photo, 119, 100, 400, 400);
-    ctx.drawImage(barcode, 169, 800, 300, 200);
+    ctx.drawImage(logo, 15, 15, 100, 120);
+    ctx.drawImage(photo, 0, 0, photo.width, photo.height, 219, 325, 200, 270);
+    ctx.drawImage(barcode, (637.5 - barcode.width) / 2, 835, barcode.width, barcode.height);
     ctx.fillStyle = "black";
-    ctx.font = '32px Arial'
+    ctx.font = '35px Sans-serif'
+    ctx.fillText("RADHA SOAMI SATSANG BEAS", 125, 90);
 
-    ctx.fillText(employee.name, 119, 570);
-    ctx.fillText(Centers.SubcenterName(employee.center, employee.subcenter) + "(" + Centers.CenterName(employee.center) + ")", 119, 670);
-    ctx.fillText(Centers.DepartmentName(employee.department), 119, 770);
+    ctx.fillStyle = "#1d3d96";
+    ctx.fillRect(0, 150, 637.5, 100);
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.font = "50px Sans-serif";
+    ctx.fillText(Centers.DepartmentName(employee.department), 320, 220);
+
+    ctx.font = "35px Sans-serif";
+    ctx.fillStyle = "black"
+    ctx.fillText(Centers.SubcenterName(employee.center, employee.subcenter) + " (" + Centers.CenterName(employee.center) + ")", 320, 300);
+
+    ctx.fillText(employee.name, 320, 630);
+    ctx.fillText("S/o. / W/o. " + employee.sowo, 320, 670);
+
+
+    ctx.textAlign = "left";
+    ctx.fillStyle = "black";
+    ctx.font = "25px Sans-serif";
+    ctx.fillText("ID no.", 80, 710);
+    ctx.fillText("Zone Badge No.", 80, 740);
+    ctx.fillText("Sewa at M. C.", 80, 770);
+    ctx.fillText("Contact no.", 80, 800);
+    ctx.fillText("Blood Group", 80, 830);
+
+    ctx.fillText(employee.idno, 300, 710);
+    ctx.fillText(employee.zoneno, 300, 740);
+    ctx.fillText(employee.zonedepartment, 300, 770);
+    ctx.fillText(employee.contactno, 300, 800);
+    ctx.fillText(employee.blood, 300, 830);
+
 
     const cardID = uuidv4();
     employee.uuid = cardID;

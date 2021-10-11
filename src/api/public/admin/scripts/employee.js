@@ -36,7 +36,7 @@ const LoadDepartments = async () => {
     }
 }
 
-LoadSubcenters = async () => {
+let LoadSubcenters = async () => {
     subcenter.innerHTML = "";
     const subcenters = await GetSubcenters(center.options[center.selectedIndex].value);
     for (let i = 0; i < subcenters.length; i++) {

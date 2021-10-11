@@ -10,16 +10,15 @@ const GetCards = async () => {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-            sessionID: sessionID
-        })
     }).then(res => res.json());
 
-    if (response[0] === -1) window.location.href = "/admin/login.html";
+    if (response.code === -1) window.location.href = "/admin/login.html";
 
-    response.forEach(v => {
-        content.innerHTML += "<img class='card' width='375' height='600' src=" + v + ">";
-    });
+    for (let i = 0; i < response.data.length; i++) {
+        console.log(1);
+        content.innerHTML += "<img class='card' width='375' height='600' src=" + response.data[i] + ">";
+    }
+
 }
 
 const Download = async () => {
@@ -29,15 +28,12 @@ const Download = async () => {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            sessionID: sessionID
-        })
+        }
     }).then(res => res.json());
 
-    if (response[0] === -1) window.location.href = "/admin/login.html";
+    if (response.code === -1) window.location.href = "/admin/login.html";
 
-    window.open(response[0], "_blank").focus();
+    window.open(response.data, "_blank").focus();
 
 }
 

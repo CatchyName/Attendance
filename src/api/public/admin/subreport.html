@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Center report</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+
+<body>
+    <header onclick="window.location = '/admin'">
+        <h1>Generate Development Center Report</h1>
+    </header>
+    <p id="err"></p>
+    Development Center: <select id="center"></select><br />
+    Subcenter: <select id="subcenter"></select><br />
+    <button id="excel">Export to excel</button>
+    <table id="table">
+
+    </table>
+    <script defer src="scripts/functions.js"></script>
+    <script defer src="scripts/subcenterreports.js"></script>
+</body>
+
+</html>

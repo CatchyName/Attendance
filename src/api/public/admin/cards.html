@@ -6,6 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cards</title>
+    <link rel="stylesheet" href="styles/style.css">
+
     <style>
         @media print {
             @page {
@@ -41,11 +43,14 @@
 </head>
 
 <body>
-    <h1>Cards for all employees</h1>
+    <header onclick="window.location = '/admin'">
+        <h1>Cards for all employees</h1>
+    </header>
     <button onclick="Download()">Download all cards .PNG format</button>
     <div id="content">
+
     </div>
-    <script src="cards.js"></script>
+    <script src="scripts/cards.js"></script>
 </body>
 
 </html>
