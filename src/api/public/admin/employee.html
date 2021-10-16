@@ -20,7 +20,8 @@
         <p id="department"></p>
         <form id="form" method="post" action="/admin/setphoto" enctype="multipart/form-data">
             <p>Change employee photo</p>
-            <input type="file" name="photo" accept="image/png">
+            <!-- <input type="file" name="photo" accept="image/png"> -->
+            <input type="file" name="photo" accept="image/*">
             <input type="submit" value="Change Photo">
         </form>
         <button id="report" onclick="GetReport()">Export to Excel</button>

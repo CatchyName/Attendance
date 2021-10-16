@@ -16,7 +16,7 @@ const GetCards = async () => {
 
     for (let i = 0; i < response.data.length; i++) {
         console.log(1);
-        content.innerHTML += "<img class='card' width='375' height='600' src=" + response.data[i] + ">";
+        content.innerHTML += "<img class='card' src=" + response.data[i] + ">";
     }
 
 }

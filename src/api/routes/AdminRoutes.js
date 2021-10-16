@@ -1,5 +1,6 @@
 const express = require("express");
 const multer = require("multer");
+const jimp = require("jimp");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const fs = require("fs");
@@ -44,11 +45,14 @@ router.post("/uploadfile", upload.single("sheet"), (req, res) => {
 
 router.post("/setphoto/:id", photoupload.single("photo"), async (req, res) => {
     const id = req.params.id;
-    const filename = req.file.filename;
+    let filename = req.file.filename;
     if (!filename) {
         res.redirect("/admin/employees.html");
         return;
     }
+    const image = await jimp.read(path.resolve(__dirname, "../data/Photos/" + filename));
+    filename = path.parse(filename).name + ".png";
+    await image.writeAsync(path.resolve(__dirname, "../data/Photos/" + filename));
     Card.ChangePhoto(await parseInt(id), filename);
     res.redirect("/admin/employees.html");
 });

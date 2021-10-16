@@ -28,8 +28,8 @@ const CreateID = async (employeeID) => {
     ctx.drawImage(photo, 0, 0, photo.width, photo.height, 219, 325, 200, 270);
     ctx.drawImage(barcode, (637.5 - barcode.width) / 2, 835, barcode.width, barcode.height);
     ctx.fillStyle = "black";
-    ctx.font = '35px sans-serif'
-    ctx.fillText("RADHA SOAMI SATSANG BEAS", 125, 90);
+    ctx.font = '32px arial'
+    ctx.fillText("RADHA SOAMI SATSANG BEAS", 120, 90);
 
     ctx.fillStyle = "#1d3d96";
     ctx.fillRect(0, 150, 637.5, 100);
