@@ -97,7 +97,7 @@ router.post("/daysessions", (req, res) => {
 // Generate ID Cards
 router.post("/card", async (req, res) => {
     const response = await AdminController.GenerateCard(req.body.employeeID);
-    res.send([response]);
+    res.send({ code: 0, data: response });
 });
 
 router.post("/cards", async (req, res) => {

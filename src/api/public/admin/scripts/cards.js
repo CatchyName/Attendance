@@ -1,7 +1,5 @@
 const content = document.getElementById("content");
 
-const sessionID = localStorage.getItem("sessionID");
-
 const GetCards = async () => {
     let response = await fetch("/admin/cards", {
         mode: 'cors',
@@ -37,4 +35,5 @@ const Download = async () => {
 
 }
 
+CheckSession();
 GetCards();

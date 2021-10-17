@@ -11,6 +11,7 @@ const GenerateBarcode = employeeID => {
 
     const canvas = createCanvas();
     JsBarcode(canvas, employeeID.toString(), {
+        format: "code39",
         height: 120,
         width: 3,
         fontSize: 30

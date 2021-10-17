@@ -101,10 +101,10 @@ const GetCard = async () => {
         }),
     }).then(res => res.json());
 
-    if (response[0] === -1) window.location.href = "/admin/login.html";
+    if (response.code === -1) window.location.href = "/admin/login.html";
 
-    if (response[0]) {
-        window.open(response[0], "_blank").focus();
+    if (response.data) {
+        window.open(response.data, "_blank").focus();
     } else {
         err.innerHTML = "Something went wrong!";
     }

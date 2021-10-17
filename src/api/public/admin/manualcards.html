@@ -48,14 +48,19 @@
 
 <body>
     <header onclick="window.location = '/admin'">
-        <h1>Cards for all employees</h1>
+        <h1>Cards for some employees</h1>
     </header>
-    <button onclick="Download()">Download all cards .PNG format</button>
+    <form id="form">
+        <p>Enter the list of Employee IDs separated with commas(,).</p>
+        <input type="string" id="ids" placeholder="E.g. 10001, 10002"><br />
+        <input type="submit" value="Get Cards">
+    </form>
+    <p id="err"></p>
     <div id="content">
 
     </div>
     <script defer src="scripts/functions.js"></script>
-    <script defer src="scripts/cards.js"></script>
+    <script defer src="scripts/manualcards.js"></script>
 </body>
 
 </html>
